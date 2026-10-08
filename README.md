@@ -29,8 +29,9 @@ Submit form says it only works on the live site.
 | `lib/notion.js` | Reads and adds rows in Notion (used by the files below) | change Notion column names (`PROPS` at the top) |
 | `api/cards.js` | Live Notion cards on Vercel (`/api/cards`) | cache time (`CACHE_SECONDS`) |
 | `api/submit.js` | Adds visitor submissions to Notion, unpublished (`/api/submit`) | length limits (`LIMITS`) |
-| `api/thumb.js` | Card images; screenshots websites automatically (`/api/thumb`) | — |
+| `api/thumb.js` | Screenshots websites for cards with no thumbnail (`/api/thumb`) | — |
 | `lib/screenshot.js` | Captures a website screenshot (Microlink) | screenshot size (`VIEWPORT`) |
+| `lib/github.js` | Saves images to the ys-library-assets repo | folder name (`FOLDER`) |
 | `scripts/sync-notion.mjs` | Saves Notion cards to `data/cms.json` (`npm run sync`) | — |
 | `data/cms.json` | Saved copy of the Notion cards, used locally and as backup | don't edit by hand |
 
@@ -58,8 +59,7 @@ Cards are managed in the **library CMS** Notion database.
 |---|---|
 | `title` | Card title. Put **⭐** in it to pin the card to the top |
 | `url` | Where the card links (opens in a new tab) |
-| `thumbnail` | Image link for the card. Leave empty to use an automatic screenshot |
-| `screenshot` | Filled automatically (see below). Delete the file to capture a fresh one |
+| `thumbnail` | Image link for the card. Leave empty to get an automatic screenshot |
 | `description` | Card description |
 | `type` | Categories the card appears in (tag names must match the sidebar names in `js/config.js`) |
 | `Published` | Only checked rows appear on the site |
@@ -69,15 +69,25 @@ Card order in each category: ⭐ cards first → then `order` → then newest.
 
 ## Automatic screenshots
 
-When a card's `thumbnail` is empty, the first visit to the live site captures a
-screenshot of the website (via [Microlink](https://microlink.io), free ~50/day), saves it
-in the row's `screenshot` column in Notion, and shows it. After that the saved image is
-used, so each website is captured only once.
+When a card's `thumbnail` is empty, the first visit to the live site:
 
-- Want a different image? Paste a link in `thumbnail` — it always wins.
-- Want a fresh screenshot? Delete the file from `screenshot`.
-- Needs the integration's **Update content** and **Insert content** capabilities.
+1. captures a screenshot of the website (via [Microlink](https://microlink.io), free ~50/day),
+2. saves it in the public **ys-library-assets** GitHub repo, in `thumbnails/`,
+3. writes its permanent link (served by [jsDelivr](https://www.jsdelivr.com)) into the
+   row's `thumbnail` column in Notion.
+
+After that the card just uses that link, so each website is captured only once.
+
+- Want a different image? Replace the link in `thumbnail`.
+- Want a fresh screenshot? Clear `thumbnail` — the next visit captures a new one.
+- Old screenshots in Notion's `screenshot` column are moved to GitHub automatically;
+  after that the column isn't used and can be deleted.
 - Only works on the live site (locally, cards without a thumbnail show a grey box).
+
+**Setup:** create a fine-grained GitHub token at https://github.com/settings/personal-access-tokens
+with access to **only** `ys-library-assets` and **Contents: Read and write**. In Vercel, add:
+- `GITHUB_TOKEN` = that token
+- `GITHUB_ASSETS_REPO` = `yazidrahimi7/ys-library-assets`
 
 ## Visitor submissions
 
