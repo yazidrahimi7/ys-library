@@ -179,7 +179,16 @@ a { color: inherit; }
 .search input::-webkit-search-cancel-button { filter: invert(1); opacity: 0.6; }
 
 .section { margin-top: 44px; }
-.section-title { margin: 0 0 20px; font-size: 28px; font-weight: 500; letter-spacing: -0.01em; }
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.section-title { margin: 0; font-size: 28px; font-weight: 500; letter-spacing: -0.01em; }
+.view-all { flex-shrink: 0; padding: 8px 14px; font-size: 14px; text-decoration: none; }
+.view-all .feather { width: 16px; height: 16px; }
 .section-note { margin: -12px 0 20px; color: var(--text-2); }
 
 .grid {

@@ -139,7 +139,16 @@ function renderContent() {
 // A heading + grid of cards. Options: note, empty (message), viewAll (category id)
 function section(title, cards, { note, empty, viewAll } = {}) {
   const wrap = el("section", "section");
-  const head = el("h2", "section-title", title);
+
+  // Title row: heading on the left, "View all" on the right (when there are more)
+  const head = el("div", "section-head");
+  head.append(el("h2", "section-title", title));
+  if (viewAll) {
+    const link = el("a", "btn btn-ghost view-all", "View all");
+    link.href = "#" + viewAll;
+    link.append(icon("arrow-right"));
+    head.append(link);
+  }
   wrap.append(head);
   if (note) wrap.append(el("p", "section-note", note));
 
@@ -157,14 +166,6 @@ function section(title, cards, { note, empty, viewAll } = {}) {
   const grid = el("div", "grid");
   cards.forEach((c) => grid.append(cardEl(c)));
   wrap.append(grid);
-
-  if (viewAll) {
-    const link = el("a", "btn btn-ghost view-all", "View all");
-    link.href = "#" + viewAll;
-    link.append(icon("arrow-right"));
-    link.style.marginTop = "20px";
-    wrap.append(link);
-  }
   return wrap;
 }
 
