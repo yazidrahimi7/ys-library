@@ -1,0 +1,12 @@
+{
+  "name": "library",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "python -m http.server 5173",
+    "sync": "node --env-file=.env scripts/sync-notion.mjs"
+  }
+}

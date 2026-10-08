@@ -1,0 +1,10 @@
+# Files Vercel should NOT upload
+.env
+.env.*
+!.env.example
+.agents/
+.claude/
+scripts/
+skills-lock.json
+plans/
+design-plans/

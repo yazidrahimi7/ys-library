@@ -1,0 +1,452 @@
+/* ============================================================
+   DESIGN TOKENS — change colors, fonts and sizes here.
+   ============================================================ */
+:root {
+  --bg: #fafafa;
+  --text: #111114;
+  --muted: #8a8a8a;
+  --line: #d9d9d9;
+  --surface: #f0f0f0;       /* cards + group headers */
+  --thumb: #9a9a9a;         /* empty screenshot square */
+  --accent: #2a3fc1;        /* blue buttons + active category */
+  --accent-hover: #2233a3;
+  --on-accent: #ffffff;
+  --danger: #c0352b;
+  --footer-bg: #14141a;
+  --footer-text: #f5f5f5;
+  --footer-ring: rgba(255, 255, 255, 0.5);
+  --ring-speed: 24s;       /* time for one ring to grow from small to big */
+
+  --font-sans: "Roboto Mono", ui-monospace, Consolas, monospace;
+  --font-mono: "Roboto Mono", ui-monospace, Consolas, monospace;
+
+  --gutter: 40px;           /* page side padding */
+  --sidebar-width: clamp(240px, 20vw, 310px);
+  --card-columns: 4;        /* cards per row on desktop (tablet/mobile set below) */
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font: inherit; cursor: pointer; }
+a { color: inherit; }
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 22px;
+  border: 0;
+  font-family: var(--font-mono);
+  font-size: 17px;
+  font-weight: 500;
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+.btn-primary { background: var(--accent); color: var(--on-accent); }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-ghost { background: transparent; color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
+.btn-ghost:hover { background: var(--surface); }
+.btn-danger { background: transparent; color: var(--danger); margin-right: auto; padding-left: 0; }
+.btn-plus { font-size: 26px; line-height: 0; font-weight: 400; }
+
+.link-btn {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-decoration: underline;
+}
+
+.icon-btn {
+  background: none;
+  border: 0;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--muted);
+}
+.icon-btn:hover { color: var(--text); }
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 var(--gutter);
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-mark { width: 48px; height: 48px; color: var(--text); }
+.logo-text { font-size: 36px; font-weight: 500; letter-spacing: -0.01em; }
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  gap: 48px;
+  padding: 64px var(--gutter) 120px;
+  min-height: 70vh;
+}
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+.sidebar-title { font-size: 28px; font-weight: 500; margin: 6px 0 28px; }
+
+.group + .group { margin-top: 24px; }
+
+.group-name {
+  margin: 0;
+  padding: 9px 10px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.cat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 13px 10px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 500;
+  text-align: left;
+}
+.cat:hover { background: var(--surface); }
+.cat.is-active { background: var(--accent); color: var(--on-accent); border-bottom-color: var(--accent); }
+.cat-count { font-size: 13px; font-weight: 400; opacity: 0.6; }
+
+.backup {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-top: 32px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ============================================================
+   CONTENT + CARDS
+   ============================================================ */
+.content { min-width: 0; }
+
+.page-title {
+  margin: 0;
+  font-size: clamp(48px, 7vw, 92px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.divider { border: 0; border-top: 1px solid var(--line); margin: 48px 0; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--card-columns), minmax(0, 1fr));
+  gap: 19px;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 312px;
+  padding: 19px;
+  background: var(--surface);
+  color: var(--text);
+  transition: box-shadow 0.15s;
+}
+.card:hover,
+.card:focus-within { box-shadow: inset 0 0 0 2px var(--accent); }
+
+/* The title link covers the whole card, so the full card is clickable */
+.card-link { color: inherit; text-decoration: none; }
+.card-link::after { content: ""; position: absolute; inset: 0; }
+.card-link:focus-visible { outline: none; }
+
+/* Small "Edit" button in the top-right corner, above the card link */
+.card-edit {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  padding: 6px 10px;
+  border: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.card-edit:hover { background: var(--accent); color: var(--on-accent); }
+
+/* On devices with a mouse, only show Edit while hovering the card */
+@media (hover: hover) and (pointer: fine) {
+  .card-edit { opacity: 0; transition: opacity 0.15s; }
+  .card:hover .card-edit,
+  .card:focus-within .card-edit { opacity: 1; }
+}
+
+.card-thumb {
+  width: 71px;
+  height: 71px;
+  background: var(--thumb);
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+
+.card-title {
+  margin: 28px 0 0;
+  font-family: var(--font-mono);
+  font-size: clamp(20px, 1.7vw, 26px);
+  font-weight: 500;
+  line-height: 1.33;
+  word-break: break-word;
+  /* Max 2 lines, then "…" */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-desc {
+  margin: auto 0 0;
+  padding-top: 24px;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.empty {
+  grid-column: 1 / -1;
+  padding: 48px 24px;
+  background: var(--surface);
+  font-family: var(--font-mono);
+  color: var(--muted);
+  text-align: center;
+}
+.empty p { margin: 0 0 20px; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  position: relative;
+  overflow: hidden;
+  min-height: 600px;
+  padding: 0 var(--gutter) 40px;
+  background: var(--footer-bg);
+  color: var(--footer-text);
+  display: flex;
+  flex-direction: column;
+}
+
+.rings {
+  position: absolute;
+  left: 50%;
+  top: 200px;
+  width: 1200px;
+  height: 1200px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.rings circle {
+  fill: none;
+  stroke: var(--footer-ring);
+  stroke-width: 1.5;
+  /* Scale each ring from the center of the SVG */
+  transform-box: view-box;
+  transform-origin: 600px 600px;
+  opacity: 0;
+  animation: ring-pulse var(--ring-speed) cubic-bezier(0.3, 0, 0.6, 1) infinite;
+  /* Smooth size changes on high-res screens */
+  will-change: transform, opacity;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Rings are evenly spaced in time. Negative delays mean they're
+   already spread out when the page loads, instead of all starting at once. */
+.rings circle:nth-child(1) { animation-delay: calc(var(--ring-speed) * -0); }
+.rings circle:nth-child(2) { animation-delay: calc(var(--ring-speed) * -0.2); }
+.rings circle:nth-child(3) { animation-delay: calc(var(--ring-speed) * -0.4); }
+.rings circle:nth-child(4) { animation-delay: calc(var(--ring-speed) * -0.6); }
+.rings circle:nth-child(5) { animation-delay: calc(var(--ring-speed) * -0.8); }
+
+/* Each ring is born small and invisible, fades in, grows big, then fades out */
+@keyframes ring-pulse {
+  0%   { transform: scale(0.25); opacity: 0; }
+  25%  { opacity: 0.35; }
+  70%  { opacity: 0.2; }
+  100% { transform: scale(1);    opacity: 0; }
+}
+
+/* Turn the animation off for people who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .rings circle { animation: none; opacity: 1; }
+  .rings circle:nth-child(1) { transform: scale(0.48); }
+  .rings circle:nth-child(2) { transform: scale(0.63); }
+  .rings circle:nth-child(3) { transform: scale(0.75); }
+  .rings circle:nth-child(4) { transform: scale(0.87); }
+}
+
+.footer-cta {
+  position: relative;
+  max-width: 600px;
+  margin: 90px auto 0;
+  text-align: center;
+}
+
+.footer-heading {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.footer-text {
+  margin: 24px auto 40px;
+  max-width: 430px;
+  font-size: 18px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.footer-bottom {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: auto;
+  padding-top: 80px;
+  font-size: 18px;
+}
+.footer-bottom a { text-decoration: none; }
+.footer-bottom a:hover { text-decoration: underline; }
+
+/* ============================================================
+   DIALOG (submit / edit)
+   ============================================================ */
+.dialog {
+  width: min(520px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  padding: 28px;
+  border: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+.dialog::backdrop { background: rgba(10, 10, 15, 0.6); }
+
+.dialog-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.dialog-head h3 { margin: 0; font-size: 24px; font-weight: 500; word-break: break-word; }
+
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.field > span { font-family: var(--font-mono); font-size: 13px; color: var(--muted); text-transform: uppercase; }
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--text);
+}
+.field input:focus,
+.field textarea:focus,
+.field select:focus,
+.dropzone:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+.dropzone {
+  display: grid;
+  place-items: center;
+  min-height: 140px;
+  padding: 12px;
+  border: 1px dashed var(--muted);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+  cursor: pointer;
+}
+.dropzone.is-over { border-color: var(--accent); background: #e6e9fa; }
+.dropzone img { max-width: 100%; max-height: 220px; display: block; }
+.dropzone p { margin: 0; }
+
+.dialog-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+
+/* ============================================================
+   RESPONSIVE
+   Desktop (1200px and up): 4 cards per row, sidebar on the left
+   Tablet  (768–1199px):    3 cards per row, categories in a strip
+   Mobile  (up to 767px):   1 card per row
+   ============================================================ */
+@media (max-width: 1199px) {
+  :root { --card-columns: 3; }
+
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-top: 40px; }
+  .sidebar { min-width: 0; }
+
+  /* Sidebar becomes a horizontal scroll strip of categories */
+  .sidebar-title { display: none; }
+  #category-nav { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+  .group, .group + .group { display: flex; gap: 8px; margin: 0; flex-shrink: 0; }
+  .group-name { display: none; }
+  .cat { width: auto; white-space: nowrap; border: 1px solid var(--line); font-size: 15px; padding: 10px 12px; gap: 8px; }
+  .backup { margin-top: 16px; }
+
+  .divider { margin: 32px 0; }
+  .card { min-height: 260px; }
+}
+
+@media (max-width: 767px) {
+  :root { --gutter: 16px; --card-columns: 1; }
+
+  .layout { padding-top: 32px; }
+  .divider { margin: 28px 0; }
+  .card { min-height: 220px; }
+  .card-title { font-size: 20px; }
+  .btn { font-size: 15px; padding: 12px 16px; }
+  .logo-text { font-size: 28px; }
+  .logo-mark { width: 40px; height: 40px; }
+  .footer-bottom { flex-direction: column; font-size: 15px; }
+}
