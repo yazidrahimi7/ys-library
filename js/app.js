@@ -1,17 +1,17 @@
 /*
   ============================================================
-  APP — renders the page and handles submit / edit / delete.
-  Cards come from two places: Notion (data/cms.json) and links
-  saved in this browser with the Submit form.
+  APP — renders the cards and handles the Submit form.
   ============================================================
+  Cards come from Notion (see lib/notion.js). The Submit form sends
+  suggestions to api/submit.js, which adds them to Notion unpublished.
+
   Sections in this file:
     1. Setup & state
     2. Rendering (sidebar, cards)
-    3. Submit / edit form
-    4. Delete
-    5. Export / import backup
-    6. Helpers
-    7. Start
+    3. Submit form
+    4. Loading cards
+    5. Helpers
+    6. Start
 */
 
 /* ---------- 1. Setup & state ---------- */
@@ -20,21 +20,15 @@ const config = window.LIBRARY_CONFIG;
 const allCategories = config.groups.flatMap((g) => g.categories);
 
 const state = {
-  items: [],                          // links saved in this browser (Submit form)
-  cms: [],                            // published cards from Notion (data/cms.json)
+  cards: [],                          // published cards from Notion
   activeId: allCategories[0].id,      // selected category
-  editingId: null,                    // id of the item being edited (null = new)
-  formImage: null,                    // screenshot Blob chosen in the form
 };
-
-// Object URLs we create for screenshots, so we can free them on re-render.
-let objectUrls = [];
 
 const $ = (sel) => document.querySelector(sel);
 const grid = $("#grid");
 const nav = $("#category-nav");
 const formDialog = $("#form-dialog");
-const form = $("#item-form");
+const form = $("#submit-form");
 
 /* ---------- 2. Rendering ---------- */
 
@@ -57,34 +51,30 @@ function renderSidebar() {
 }
 
 function renderGrid() {
-  objectUrls.forEach(URL.revokeObjectURL);
-  objectUrls = [];
   grid.innerHTML = "";
 
   const cat = allCategories.find((c) => c.id === state.activeId);
   $("#page-title").textContent = cat.title || cat.name;
   document.title = `${cat.name} · ${config.siteName}`;
 
-  const items = cardsFor(state.activeId);
+  const cards = cardsFor(state.activeId);
 
-  if (!items.length) {
+  if (!cards.length) {
     const empty = el("div", "empty");
-    empty.append(el("p", "", `Nothing saved in ${cat.name} yet.`));
-    const btn = el("button", "btn btn-primary", "+ Submit the first one");
+    empty.append(el("p", "", `Nothing in ${cat.name} yet.`));
+    const btn = el("button", "btn btn-primary", "+ Suggest a website");
     btn.addEventListener("click", () => openForm());
     empty.append(btn);
     grid.append(empty);
     return;
   }
 
-  for (const item of items) {
+  for (const item of cards) {
     const card = el("article", "card");
 
-    // Notion cards use a thumbnail link; local cards use the saved screenshot
-    const thumbSrc = item.thumbnail || (item.image && imageUrl(item.image));
-    if (thumbSrc) {
+    if (item.thumbnail) {
       const img = el("img", "card-thumb");
-      img.src = thumbSrc;
+      img.src = item.thumbnail;
       img.alt = "";
       img.loading = "lazy";
       card.append(img);
@@ -104,33 +94,25 @@ function renderGrid() {
 
     if (item.description) card.append(el("p", "card-desc", item.description));
 
-    // Notion cards are edited in Notion, so only local cards get an Edit button
-    if (!item.fromNotion) {
-      const edit = el("button", "card-edit", "Edit");
-      edit.setAttribute("aria-label", `Edit ${item.title}`);
-      edit.addEventListener("click", () => openForm(item));
-      card.append(edit);
-    }
-
     grid.append(card);
   }
 }
 
-// All cards for one category: Notion cards + links saved in this browser.
+// Cards for one category.
 // Order: ⭐ in the title first, then by Notion "order" (empty = last), then newest.
 function cardsFor(categoryId) {
-  const notion = state.cms.filter((c) => c.categories.includes(categoryId));
-  const local = state.items.filter((i) => i.category === categoryId);
-  return [...notion, ...local].sort(
-    (a, b) =>
-      isStarred(b) - isStarred(a) ||
-      (a.order ?? Infinity) - (b.order ?? Infinity) ||
-      b.createdAt - a.createdAt
-  );
+  return state.cards
+    .filter((c) => c.categories.includes(categoryId))
+    .sort(
+      (a, b) =>
+        isStarred(b) - isStarred(a) ||
+        (a.order ?? Infinity) - (b.order ?? Infinity) ||
+        b.createdAt - a.createdAt
+    );
 }
 
-function isStarred(item) {
-  return item.title.includes("⭐") ? 1 : 0;
+function isStarred(card) {
+  return card.title.includes("⭐") ? 1 : 0;
 }
 
 function render() {
@@ -138,8 +120,9 @@ function render() {
   renderGrid();
 }
 
-/* ---------- 3. Submit / edit form ---------- */
+/* ---------- 3. Submit form ---------- */
 
+// Option values are the category names, which match the Notion "type" tags.
 function fillCategorySelect() {
   const select = $("#category-select");
   for (const group of config.groups) {
@@ -147,205 +130,99 @@ function fillCategorySelect() {
     og.label = group.name;
     for (const cat of group.categories) {
       const opt = el("option", "", cat.name);
-      opt.value = cat.id;
+      opt.value = cat.name;
+      opt.dataset.id = cat.id;
       og.append(opt);
     }
     select.append(og);
   }
 }
 
-function openForm(item = null) {
-  form.reset();
-  state.editingId = item ? item.id : null;
-  $("#form-title").textContent = item ? "Edit website" : "Submit a website";
-  $("#delete-btn").hidden = !item;
-  form.url.value = item ? item.url : "";
-  form.title.value = item ? item.title : "";
-  form.description.value = item ? item.description : "";
-  form.category.value = item ? item.category : state.activeId;
-  setFormImage(item ? item.image : null);
+function openForm() {
+  showForm();
   formDialog.showModal();
   form.url.focus();
 }
 
-function setFormImage(blob) {
-  state.formImage = blob;
-  const preview = $("#preview");
-  if (blob) {
-    preview.src = imageUrl(blob);
-    preview.hidden = false;
-    $("#dropzone-hint").hidden = true;
-    $("#remove-image").hidden = false;
-  } else {
-    preview.removeAttribute("src");
-    preview.hidden = true;
-    $("#dropzone-hint").hidden = false;
-    $("#remove-image").hidden = true;
-  }
+// Reset the form and show it (instead of the "Thanks" message)
+function showForm() {
+  form.reset();
+  const active = allCategories.find((c) => c.id === state.activeId);
+  form.type.value = active.name;
+  setMessage("");
+  form.hidden = false;
+  $("#thanks").hidden = true;
 }
 
-function acceptImageFile(file) {
-  if (file && file.type.startsWith("image/")) setFormImage(file);
+function setMessage(text, isError = false) {
+  const msg = $("#form-message");
+  msg.textContent = text;
+  msg.classList.toggle("is-error", isError);
 }
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const url = normalizeUrl(form.url.value);
-  const existing = state.items.find((i) => i.id === state.editingId);
 
-  const item = {
-    id: existing ? existing.id : makeId(),
-    url,
-    title: form.title.value.trim() || hostname(url),
-    description: form.description.value.trim(),
-    category: form.category.value,
-    image: state.formImage,
-    createdAt: existing ? existing.createdAt : Date.now(),
-  };
+  const data = Object.fromEntries(new FormData(form));
+  data.url = normalizeUrl(data.url);
+  if (data.thumbnail) data.thumbnail = normalizeUrl(data.thumbnail);
 
-  await DB.save(item);
-  await loadItems();
-  formDialog.close();
+  if (!data.url) return setMessage("Please enter the website link.", true);
 
-  // Jump to the category the item was saved in
-  if (item.category !== state.activeId) location.hash = item.category;
-  else render();
-});
+  const sendBtn = $("#send-btn");
+  sendBtn.disabled = true;
+  sendBtn.textContent = "Sending…";
+  setMessage("");
 
-// Screenshot: click to browse, drag & drop, or paste
-const dropzone = $("#dropzone");
-const imageInput = $("#image-input");
-
-dropzone.addEventListener("click", () => imageInput.click());
-dropzone.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); imageInput.click(); }
-});
-imageInput.addEventListener("change", () => acceptImageFile(imageInput.files[0]));
-dropzone.addEventListener("dragover", (e) => { e.preventDefault(); dropzone.classList.add("is-over"); });
-dropzone.addEventListener("dragleave", () => dropzone.classList.remove("is-over"));
-dropzone.addEventListener("drop", (e) => {
-  e.preventDefault();
-  dropzone.classList.remove("is-over");
-  acceptImageFile(e.dataTransfer.files[0]);
-});
-document.addEventListener("paste", (e) => {
-  if (!formDialog.open) return;
-  const file = [...e.clipboardData.files].find((f) => f.type.startsWith("image/"));
-  if (file) { e.preventDefault(); acceptImageFile(file); }
-});
-$("#remove-image").addEventListener("click", () => setFormImage(null));
-
-/* ---------- 4. Delete (from the edit form) ---------- */
-
-$("#delete-btn").addEventListener("click", async () => {
-  const item = state.items.find((i) => i.id === state.editingId);
-  if (!item || !confirm(`Delete "${item.title}"?`)) return;
-  await DB.remove(item.id);
-  formDialog.close();
-  await loadItems();
-  render();
-});
-
-/* ---------- 5. Export / import backup ---------- */
-
-$("#export-btn").addEventListener("click", async () => {
-  const data = await Promise.all(
-    state.items.map(async (i) => ({ ...i, image: i.image ? await blobToDataUrl(i.image) : null }))
-  );
-  const file = new Blob([JSON.stringify({ version: 1, items: data }, null, 2)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(file);
-  a.download = `library-backup-${new Date().toISOString().slice(0, 10)}.json`;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-});
-
-$("#import-btn").addEventListener("click", () => $("#import-file").click());
-
-$("#import-file").addEventListener("change", async (e) => {
-  const file = e.target.files[0];
-  e.target.value = "";
-  if (!file) return;
   try {
-    const { items } = JSON.parse(await file.text());
-    for (const i of items) {
-      await DB.save({ ...i, image: i.image ? dataUrlToBlob(i.image) : null });
-    }
-    await loadItems();
-    render();
-    alert(`Imported ${items.length} item(s).`);
+    const res = await fetch("api/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const reply = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(reply.error || submitErrorFor(res.status));
+
+    form.hidden = true;
+    $("#thanks").hidden = false;
   } catch (err) {
-    alert("Could not import that file. Is it a Library backup?");
-    console.error(err);
+    setMessage(err.message || "Something went wrong. Please try again.", true);
+  } finally {
+    sendBtn.disabled = false;
+    sendBtn.textContent = "Submit";
   }
 });
 
-/* ---------- 6. Helpers ---------- */
-
-// Create an element with an optional class and text.
-function el(tag, className = "", text = "") {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (text) node.textContent = text;
-  return node;
+// Message for errors that don't come with one (e.g. no API when running locally)
+function submitErrorFor(status) {
+  if (status === 404 || status === 405 || status === 501) {
+    return "Submitting only works on the live site.";
+  }
+  return "Something went wrong. Please try again.";
 }
 
-function imageUrl(blob) {
-  const url = URL.createObjectURL(blob);
-  objectUrls.push(url);
-  return url;
-}
+$("#submit-another").addEventListener("click", () => {
+  showForm();
+  form.url.focus();
+});
 
-function makeId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-}
+/* ---------- 4. Loading cards ---------- */
 
-// "example.com" -> "https://example.com"
-function normalizeUrl(value) {
-  const v = value.trim();
-  return /^https?:\/\//i.test(v) ? v : "https://" + v;
-}
-
-function hostname(url) {
-  try { return new URL(url).hostname.replace(/^www\./, ""); }
-  catch { return url; }
-}
-
-function blobToDataUrl(blob) {
-  return new Promise((resolve) => {
-    const r = new FileReader();
-    r.onload = () => resolve(r.result);
-    r.readAsDataURL(blob);
-  });
-}
-
-function dataUrlToBlob(dataUrl) {
-  const [head, b64] = dataUrl.split(",");
-  const type = head.match(/data:(.*?);/)[1];
-  const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
-  return new Blob([bytes], { type });
-}
-
-async function loadItems() {
-  state.items = await DB.getAll();
-}
-
-// Where Notion cards come from, tried in order:
+// Where cards come from, tried in order:
 //   1. api/cards      — live from Notion (on Vercel, see api/cards.js)
-//   2. data/cms.json  — backup saved by `npm run sync` (used when running locally)
-const CMS_SOURCES = ["api/cards", "data/cms.json"];
+//   2. data/cms.json  — saved copy from `npm run sync` (used when running locally)
+const CARD_SOURCES = ["api/cards", "data/cms.json"];
 
 // Each Notion "type" tag is matched to a category by name, e.g. "Web" → #web.
-async function loadCms() {
-  const cards = await fetchFirstWorking(CMS_SOURCES);
+async function loadCards() {
+  const cards = await fetchFirstWorking(CARD_SOURCES);
   const byName = (name) =>
     allCategories.find((c) => c.name.toLowerCase() === name.toLowerCase() || c.id === name.toLowerCase());
 
-  state.cms = cards.map((c) => ({
+  state.cards = cards.map((c) => ({
     ...c,
     categories: c.types.map(byName).filter(Boolean).map((cat) => cat.id),
     createdAt: Date.parse(c.createdAt) || 0,
-    fromNotion: true,
   }));
 }
 
@@ -360,8 +237,25 @@ async function fetchFirstWorking(urls) {
       // Not available here (or not JSON) — try the next source
     }
   }
-  console.warn("No Notion cards available; showing local links only");
+  console.warn("No cards available");
   return [];
+}
+
+/* ---------- 5. Helpers ---------- */
+
+// Create an element with an optional class and text.
+function el(tag, className = "", text = "") {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text) node.textContent = text;
+  return node;
+}
+
+// "example.com" -> "https://example.com"
+function normalizeUrl(value = "") {
+  const v = value.trim();
+  if (!v) return "";
+  return /^https?:\/\//i.test(v) ? v : "https://" + v;
 }
 
 // Read the active category from the URL (#web, #figma, ...)
@@ -370,7 +264,7 @@ function readHash() {
   state.activeId = allCategories.some((c) => c.id === id) ? id : allCategories[0].id;
 }
 
-/* ---------- 7. Start ---------- */
+/* ---------- 6. Start ---------- */
 
 function fillStaticText() {
   document.querySelectorAll("[data-site-name]").forEach((n) => (n.textContent = config.siteName));
@@ -403,6 +297,6 @@ window.addEventListener("hashchange", () => {
   fillStaticText();
   fillCategorySelect();
   readHash();
-  await Promise.all([loadItems(), loadCms()]);
+  await loadCards();
   render();
 })();

@@ -61,18 +61,8 @@ a { color: inherit; }
 .btn-primary:hover { background: var(--accent-hover); }
 .btn-ghost { background: transparent; color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
 .btn-ghost:hover { background: var(--surface); }
-.btn-danger { background: transparent; color: var(--danger); margin-right: auto; padding-left: 0; }
+.btn:disabled { opacity: 0.6; cursor: wait; }
 .btn-plus { font-size: 26px; line-height: 0; font-weight: 400; }
-
-.link-btn {
-  background: none;
-  border: 0;
-  padding: 0;
-  color: var(--accent);
-  font-family: var(--font-mono);
-  font-size: 13px;
-  text-decoration: underline;
-}
 
 .icon-btn {
   background: none;
@@ -145,16 +135,6 @@ a { color: inherit; }
 .cat.is-active { background: var(--accent); color: var(--on-accent); border-bottom-color: var(--accent); }
 .cat-count { font-size: 13px; font-weight: 400; opacity: 0.6; }
 
-.backup {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-  margin-top: 32px;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--muted);
-}
-
 /* ============================================================
    CONTENT + CARDS
    ============================================================ */
@@ -194,29 +174,6 @@ a { color: inherit; }
 .card-link { color: inherit; text-decoration: none; }
 .card-link::after { content: ""; position: absolute; inset: 0; }
 .card-link:focus-visible { outline: none; }
-
-/* Small "Edit" button in the top-right corner, above the card link */
-.card-edit {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 1;
-  padding: 6px 10px;
-  border: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  text-transform: uppercase;
-}
-.card-edit:hover { background: var(--accent); color: var(--on-accent); }
-
-/* On devices with a mouse, only show Edit while hovering the card */
-@media (hover: hover) and (pointer: fine) {
-  .card-edit { opacity: 0; transition: opacity 0.15s; }
-  .card:hover .card-edit,
-  .card:focus-within .card-edit { opacity: 1; }
-}
 
 .card-thumb {
   width: 71px;
@@ -392,25 +349,18 @@ a { color: inherit; }
 }
 .field input:focus,
 .field textarea:focus,
-.field select:focus,
-.dropzone:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.field select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
 
-.dropzone {
-  display: grid;
-  place-items: center;
-  min-height: 140px;
-  padding: 12px;
-  border: 1px dashed var(--muted);
-  background: var(--surface);
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: var(--muted);
-  text-align: center;
-  cursor: pointer;
-}
-.dropzone.is-over { border-color: var(--accent); background: #e6e9fa; }
-.dropzone img { max-width: 100%; max-height: 220px; display: block; }
-.dropzone p { margin: 0; }
+.dialog-note { margin: -8px 0 20px; font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+
+/* Spam trap field: hidden from people (not display:none, which some bots skip) */
+.trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.form-message { margin: 0; min-height: 1em; font-family: var(--font-mono); font-size: 14px; }
+.form-message.is-error { color: var(--danger); }
+
+.thanks h3 { margin: 0 0 12px; font-size: 24px; font-weight: 500; }
+.thanks p { margin: 0; font-family: var(--font-mono); font-size: 15px; line-height: 1.6; color: var(--muted); }
 
 .dialog-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
 
@@ -432,7 +382,6 @@ a { color: inherit; }
   .group, .group + .group { display: flex; gap: 8px; margin: 0; flex-shrink: 0; }
   .group-name { display: none; }
   .cat { width: auto; white-space: nowrap; border: 1px solid var(--line); font-size: 15px; padding: 10px 12px; gap: 8px; }
-  .backup { margin-top: 16px; }
 
   .divider { margin: 32px 0; }
   .card { min-height: 260px; }
