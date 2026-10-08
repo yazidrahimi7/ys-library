@@ -77,12 +77,6 @@
 
         <p class="dialog-note">Submissions are reviewed before they appear on the site.</p>
 
-        <!-- Shown only when screenshots are running low (filled in by app.js) -->
-        <p class="quota-note" id="quota-note" hidden>
-          <i data-feather="info"></i>
-          <span id="quota-text"></span>
-        </p>
-
         <label class="field">
           <span>Website URL *</span>
           <input name="url" type="url" placeholder="https://example.com" maxlength="500" required />
@@ -106,6 +100,11 @@
         <label class="field">
           <span>Thumbnail image link (optional)</span>
           <input name="thumbnail" type="url" placeholder="https://example.com/image.png" maxlength="500" />
+          <!-- Shown only when screenshots are running low (filled in by app.js) -->
+          <span class="quota-note" id="quota-note" hidden>
+            <i data-feather="info"></i>
+            <span id="quota-text"></span>
+          </span>
         </label>
 
         <!-- Spam trap: hidden from people, bots tend to fill it in -->
