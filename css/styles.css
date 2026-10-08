@@ -62,7 +62,9 @@ a { color: inherit; }
   border-right: 1px solid var(--border);
   background: var(--bg);
   overflow-y: auto;
+  scrollbar-width: none;            /* hide the scrollbar (still scrolls) — Firefox */
 }
+.sidebar::-webkit-scrollbar { display: none; }   /* same for Chrome, Edge, Safari */
 
 .sidebar-top { display: flex; justify-content: space-between; align-items: center; padding-left: 4px; }
 .logo { display: block; width: 52px; height: 52px; }

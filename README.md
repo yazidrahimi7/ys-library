@@ -71,13 +71,18 @@ Card order in each category: ⭐ cards first → then `order` → then newest.
 
 When a card's `thumbnail` is empty, the first visit to the live site:
 
-1. captures a screenshot of the website (via [Microlink](https://microlink.io), free ~50/day),
+1. captures a screenshot of the website (via [Microlink](https://microlink.io), free plan: 25 per day),
 2. saves it in the public **ys-library-assets** GitHub repo, in `thumbnails/`,
 3. writes its permanent link (served by [jsDelivr](https://www.jsdelivr.com)) into the
    row's `thumbnail` column in Notion.
 
 After that the card just uses that link, so each website is captured only once.
 
+- Popups (cookie banners, newsletter modals, chat bubbles) are removed before the
+  picture is taken. If one still shows, add its CSS selector to `HIDE_SELECTORS` in
+  `lib/screenshot.js`, then clear that card's `thumbnail` to capture it again.
+- Some sites block screenshot tools completely (e.g. "Access Denied") — paste your own
+  image link in `thumbnail` for those.
 - Want a different image? Replace the link in `thumbnail`.
 - Want a fresh screenshot? Clear `thumbnail` — the next visit captures a new one.
 - Old screenshots in Notion's `screenshot` column are moved to GitHub automatically;
