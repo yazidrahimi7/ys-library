@@ -248,6 +248,31 @@ function openForm() {
   showForm();
   formDialog.showModal();
   form.url.focus();
+  showQuotaNote();
+}
+
+// Small warning when screenshots for preview images are running low
+// (see api/quota.js). Checked once per page visit; nothing shows if unknown.
+let quotaRequest = null;
+async function showQuotaNote() {
+  quotaRequest ||= fetch("api/quota").then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  const quota = await quotaRequest;
+  const note = $("#quota-note");
+  if (!quota || !quota.low) return (note.hidden = true);
+
+  const back = quota.resetAt ? ` They're back ${timeFromNow(quota.resetAt)}.` : "";
+  $("#quota-text").textContent = quota.out
+    ? `Preview screenshots are paused for today, so your submission's image will be added later.${back}`
+    : `Only ${quota.remaining} preview screenshot${quota.remaining === 1 ? "" : "s"} left today — images for new submissions may be added later.`;
+  note.hidden = false;
+}
+
+// e.g. "in about 3 hours" / "in a few minutes"
+function timeFromNow(ms) {
+  const hours = Math.round((ms - Date.now()) / 3600000);
+  if (hours >= 2) return `in about ${hours} hours`;
+  if (hours === 1) return "in about an hour";
+  return "in a few minutes";
 }
 
 // Reset the form and show it (instead of the "Thanks" message)

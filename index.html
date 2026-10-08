@@ -77,6 +77,12 @@
 
         <p class="dialog-note">Submissions are reviewed before they appear on the site.</p>
 
+        <!-- Shown only when screenshots are running low (filled in by app.js) -->
+        <p class="quota-note" id="quota-note" hidden>
+          <i data-feather="info"></i>
+          <span id="quota-text"></span>
+        </p>
+
         <label class="field">
           <span>Website URL *</span>
           <input name="url" type="url" placeholder="https://example.com" maxlength="500" required />

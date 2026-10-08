@@ -299,6 +299,22 @@ a { color: inherit; }
 .dialog-head h3 { margin: 0; font-size: 22px; font-weight: 500; }
 .dialog-note { margin: 0 0 24px; color: var(--text-2); font-size: 14px; }
 
+/* Small warning when screenshots are running low */
+.quota-note {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin: -12px 0 20px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-2);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.quota-note[hidden] { display: none; }
+.quota-note .feather { width: 16px; height: 16px; margin-top: 1px; }
+
 .field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
 .field > span { color: var(--text-2); font-size: 13px; }
 .field input,

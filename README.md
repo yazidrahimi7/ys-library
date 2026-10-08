@@ -31,7 +31,11 @@ Submit form says it only works on the live site.
 | `api/submit.js` | Adds visitor submissions to Notion, unpublished (`/api/submit`) | length limits (`LIMITS`) |
 | `api/thumb.js` | Screenshots websites for cards with no thumbnail (`/api/thumb`) | — |
 | `lib/screenshot.js` | Captures a website screenshot (Microlink) | screenshot size (`VIEWPORT`) |
-| `lib/github.js` | Saves images to the ys-library-assets repo | folder name (`FOLDER`) |
+| `lib/github.js` | Saves files to the ys-library-assets repo | folder name (`FOLDER`) |
+| `lib/thumbnails.js` | Screenshot → GitHub → Notion link, shared by the two APIs below | — |
+| `lib/quota.js` | Tracks how many free screenshots are left | warning level (`LOW_AT`) |
+| `api/quota.js` | Screenshot quota for the Submit form's note (`/api/quota`) | — |
+| `api/recapture.js` | Daily catch-up for cards still missing an image | time budget |
 | `scripts/sync-notion.mjs` | Saves Notion cards to `data/cms.json` (`npm run sync`) | — |
 | `data/cms.json` | Saved copy of the Notion cards, used locally and as backup | don't edit by hand |
 
@@ -81,6 +85,11 @@ After that the card just uses that link, so each website is captured only once.
 - Popups (cookie banners, newsletter modals, chat bubbles) are removed before the
   picture is taken. If one still shows, add its CSS selector to `HIDE_SELECTORS` in
   `lib/screenshot.js`, then clear that card's `thumbnail` to capture it again.
+- **Daily limit:** the free plan allows 25 screenshots per 24 hours. The remaining count
+  is saved in `status/screenshots.json` in the assets repo. When 5 or fewer are left,
+  the Submit form shows a small note. When none are left, screenshots pause (cards show
+  a grey box) and resume automatically after the reset — on the next visit, or the daily
+  catch-up run (`api/recapture.js`, 06:00 UTC, set in `vercel.json`).
 - Some sites block screenshot tools completely (e.g. "Access Denied") — paste your own
   image link in `thumbnail` for those.
 - Want a different image? Replace the link in `thumbnail`.
@@ -93,6 +102,7 @@ After that the card just uses that link, so each website is captured only once.
 with access to **only** `ys-library-assets` and **Contents: Read and write**. In Vercel, add:
 - `GITHUB_TOKEN` = that token
 - `GITHUB_ASSETS_REPO` = `yazidrahimi7/ys-library-assets`
+- `CRON_SECRET` = any long random text (protects the daily catch-up run)
 
 ## Visitor submissions
 

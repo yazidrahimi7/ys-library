@@ -2,28 +2,25 @@
   ============================================================
   GET /api/thumb?id=<notion row id> — image for a card with no thumbnail.
   ============================================================
-  The site only calls this for cards whose "thumbnail" is empty:
-    1. Capture a screenshot of the website (or reuse an old one
-       saved in Notion's "screenshot" column).
-    2. Save it in the GitHub assets repo (see lib/github.js).
-    3. Write its permanent link into the row's "thumbnail" column.
-    4. Show the image.
-  From then on the card loads the image straight from that link,
-  so each website is captured only once.
+  The site only calls this for cards whose "thumbnail" is empty. It makes
+  a screenshot, saves it, and writes its link into Notion (see
+  lib/thumbnails.js). From then on the card loads the image straight
+  from that link, so each website is captured only once.
+
+  If today's screenshots are used up, it answers right away without
+  trying, and the card shows a grey box until a later visit (or the
+  daily api/recapture.js run) succeeds.
 
   Needs Environment Variables: NOTION_TOKEN, NOTION_DATABASE_ID,
-  GITHUB_TOKEN, GITHUB_ASSETS_REPO. The Notion integration needs the
-  "Update content" capability.
+  GITHUB_TOKEN, GITHUB_ASSETS_REPO.
 */
 
-import { fetchRow, setThumbnail } from "../lib/notion.js";
-import { captureScreenshot, downloadImage } from "../lib/screenshot.js";
-import { saveImageToGitHub } from "../lib/github.js";
+import { fetchRow } from "../lib/notion.js";
+import { makeThumbnail, settings, QuotaError } from "../lib/thumbnails.js";
 
 export default async function handler(req, res) {
   const id = String(req.query.id || "");
-  const notion = { token: process.env.NOTION_TOKEN };
-  const github = { token: process.env.GITHUB_TOKEN, repo: process.env.GITHUB_ASSETS_REPO };
+  const env = settings();
   const databaseId = String(process.env.NOTION_DATABASE_ID || "").replace(/-/g, "");
 
   // Only Notion page ids are accepted
@@ -31,13 +28,13 @@ export default async function handler(req, res) {
     return fail(res, 400, "Bad id");
   }
   // Check settings first, so a screenshot isn't captured just to be thrown away
-  if (!github.token || !github.repo) {
+  if (!env.github.token || !env.github.repo) {
     console.error("Missing GITHUB_TOKEN or GITHUB_ASSETS_REPO");
     return fail(res, 500, "Image storage isn't set up");
   }
 
   try {
-    const row = await fetchRow(notion, id);
+    const row = await fetchRow(env.notion, id);
 
     // Only published cards from our own database
     if (row.databaseId !== databaseId || !row.published || !row.url) {
@@ -50,29 +47,16 @@ export default async function handler(req, res) {
       return res.redirect(302, row.thumbnail);
     }
 
-    const image = row.oldScreenshotUrl
-      ? await downloadImage(row.oldScreenshotUrl)
-      : await captureScreenshot(row.url);
-
-    const link = await saveImageToGitHub(github, fileName(row), image);
-    await setThumbnail(notion, id, link);
+    const { image } = await makeThumbnail(env, id, row);
 
     // Short cache: the card will use the GitHub link from now on anyway
     res.setHeader("Content-Type", image.contentType);
     res.setHeader("Cache-Control", "public, s-maxage=300");
     res.status(200).send(Buffer.from(image.bytes));
   } catch (err) {
+    if (err instanceof QuotaError) return fail(res, 503, "Screenshot limit reached, try later");
     console.error(err);
     fail(res, 502, "Could not load image");
-  }
-}
-
-// e.g. "fast-com" from https://www.fast.com
-function fileName(row) {
-  try {
-    return new URL(row.url).hostname.replace(/^www\./, "").replace(/[^a-z0-9]+/gi, "-").toLowerCase();
-  } catch {
-    return "site";
   }
 }
 

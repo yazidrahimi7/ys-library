@@ -1,5 +1,9 @@
 {
   "functions": {
-    "api/thumb.js": { "maxDuration": 60 }
-  }
+    "api/thumb.js": { "maxDuration": 60 },
+    "api/recapture.js": { "maxDuration": 60 }
+  },
+  "crons": [
+    { "path": "/api/recapture", "schedule": "0 6 * * *" }
+  ]
 }
