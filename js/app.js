@@ -173,15 +173,14 @@ function section(title, cards, { note, empty, viewAll } = {}) {
 function cardEl(item) {
   const card = el("article", "card");
 
-  if (item.thumbnail) {
-    const img = el("img", "card-thumb");
-    img.src = item.thumbnail;
-    img.alt = "";
-    img.loading = "lazy";
-    card.append(img);
-  } else {
-    card.append(el("div", "card-thumb"));
-  }
+  // Image: the Notion "thumbnail" link if set, otherwise an automatic
+  // screenshot of the website (see api/thumb.js). Grey box if neither loads.
+  const img = el("img", "card-thumb");
+  img.src = item.thumbnail || `api/thumb?id=${encodeURIComponent(item.id)}`;
+  img.alt = "";
+  img.loading = "lazy";
+  img.addEventListener("error", () => img.replaceWith(el("div", "card-thumb")), { once: true });
+  card.append(img);
 
   // The title link stretches over the whole card (see .card-link in CSS),
   // so clicking anywhere on the card opens the website in a new tab.

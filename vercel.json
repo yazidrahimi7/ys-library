@@ -1,0 +1,5 @@
+{
+  "functions": {
+    "api/thumb.js": { "maxDuration": 60 }
+  }
+}

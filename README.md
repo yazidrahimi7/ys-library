@@ -29,6 +29,8 @@ Submit form says it only works on the live site.
 | `lib/notion.js` | Reads and adds rows in Notion (used by the files below) | change Notion column names (`PROPS` at the top) |
 | `api/cards.js` | Live Notion cards on Vercel (`/api/cards`) | cache time (`CACHE_SECONDS`) |
 | `api/submit.js` | Adds visitor submissions to Notion, unpublished (`/api/submit`) | length limits (`LIMITS`) |
+| `api/thumb.js` | Card images; screenshots websites automatically (`/api/thumb`) | — |
+| `lib/screenshot.js` | Captures a website screenshot (Microlink) | screenshot size (`VIEWPORT`) |
 | `scripts/sync-notion.mjs` | Saves Notion cards to `data/cms.json` (`npm run sync`) | — |
 | `data/cms.json` | Saved copy of the Notion cards, used locally and as backup | don't edit by hand |
 
@@ -56,13 +58,26 @@ Cards are managed in the **library CMS** Notion database.
 |---|---|
 | `title` | Card title. Put **⭐** in it to pin the card to the top |
 | `url` | Where the card links (opens in a new tab) |
-| `thumbnail` | Image link for the card's small square |
+| `thumbnail` | Image link for the card. Leave empty to use an automatic screenshot |
+| `screenshot` | Filled automatically (see below). Delete the file to capture a fresh one |
 | `description` | Card description |
 | `type` | Categories the card appears in (tag names must match the sidebar names in `js/config.js`) |
 | `Published` | Only checked rows appear on the site |
 | `order` | Position: 1 first, 2 second… Empty = after numbered cards |
 
 Card order in each category: ⭐ cards first → then `order` → then newest.
+
+## Automatic screenshots
+
+When a card's `thumbnail` is empty, the first visit to the live site captures a
+screenshot of the website (via [Microlink](https://microlink.io), free ~50/day), saves it
+in the row's `screenshot` column in Notion, and shows it. After that the saved image is
+used, so each website is captured only once.
+
+- Want a different image? Paste a link in `thumbnail` — it always wins.
+- Want a fresh screenshot? Delete the file from `screenshot`.
+- Needs the integration's **Update content** and **Insert content** capabilities.
+- Only works on the live site (locally, cards without a thumbnail show a grey box).
 
 ## Visitor submissions
 
@@ -80,7 +95,7 @@ Built-in protection against junk:
 
 **Notion integration (once)**
 1. Create an integration at https://www.notion.so/profile/integrations and copy its secret.
-2. On its **Capabilities** tab, turn on **Read content** and **Insert content**.
+2. On its **Capabilities** tab, turn on **Read content**, **Update content** and **Insert content**.
 3. In Notion, open the library CMS database → `•••` → **Connections** → add the integration.
 4. Copy `.env.example` to `.env` and paste the secret after `NOTION_TOKEN=`.
 
@@ -109,6 +124,5 @@ Changed the secret later? Update it in Vercel → Settings → Environment Varia
 
 ## Ideas for later
 
-- Search box.
-- Image upload in the Submit form (would need file storage, e.g. Vercel Blob).
+- Image upload in the Submit form.
 - Rate limiting for submissions if spam becomes a problem.
