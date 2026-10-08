@@ -16,6 +16,10 @@ window.LIBRARY_CONFIG = {
 
   searchPlaceholder: 'Try "dark designs"',
 
+  // Cards with this "type" tag in Notion appear in the Featured section
+  // at the top of the "All" page. (It isn't a sidebar category.)
+  featuredTag: "Featured",
+
   // The card at the bottom of the sidebar
   promo: {
     heading: "Have a nice idea?",

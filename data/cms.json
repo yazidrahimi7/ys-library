@@ -1,11 +1,11 @@
 {
-  "syncedAt": "2026-10-08T12:35:12.188Z",
+  "syncedAt": "2026-10-08T13:03:07.603Z",
   "cards": [
     {
       "id": "3f3b3237-87d7-80e3-8733-d19cbb6802ce",
       "title": "Typescale",
       "url": "https://typescale.com/",
-      "thumbnail": "",
+      "thumbnail": "https://cdn.jsdelivr.net/gh/yazidrahimi7/ys-library-assets@10e66bae0621c6480fcb8665ac8e6013f79c392a/thumbnails/typescale-com-20261008123605.png",
       "description": "",
       "types": [
         "Typography"
@@ -62,16 +62,160 @@
       "createdAt": "2026-10-08T04:53:00.000Z"
     },
     {
+      "id": "33322d77-f096-4549-925f-f5ef186b6b9c",
+      "title": "Typescale",
+      "url": "https://typescale.com/",
+      "thumbnail": "https://cdn.jsdelivr.net/gh/yazidrahimi7/ys-library-assets@670d20101d83204dd2b2317a4d03347eebe61eef/thumbnails/typescale-com-20261008125603.png",
+      "description": "",
+      "types": [
+        "Typography"
+      ],
+      "order": null,
+      "createdAt": "2024-03-28T00:55:00.000Z"
+    },
+    {
       "id": "96685276-080e-4da1-85e7-ad04f7a84cb4",
       "title": "Free Faces",
       "url": "https://www.freefaces.gallery/?ref=uxdesignweekly",
-      "thumbnail": "",
+      "thumbnail": "https://cdn.jsdelivr.net/gh/yazidrahimi7/ys-library-assets@23869d40b902f989b0e86355f54ced00c633a285/thumbnails/freefaces-gallery-20261008123609.png",
       "description": "",
       "types": [
         "Typography"
       ],
       "order": null,
       "createdAt": "2024-03-16T04:18:00.000Z"
+    },
+    {
+      "id": "23ae015c-c094-4d37-9cdf-a095329ad73c",
+      "title": "Fontjoy",
+      "url": "https://fontjoy.com/",
+      "thumbnail": "https://cdn.jsdelivr.net/gh/yazidrahimi7/ys-library-assets@5a5bea28df1a3e2478b4424a6e64a3cc1ccd2e46/thumbnails/fontjoy-com-20261008125609.png",
+      "description": "",
+      "types": [
+        "Typography"
+      ],
+      "order": null,
+      "createdAt": "2023-05-28T02:35:00.000Z"
+    },
+    {
+      "id": "1128cae0-e1ff-4ac5-868f-ebc832b6e0b9",
+      "title": "1001 Fonts",
+      "url": "https://www.1001fonts.com/sans-serif-fonts.html",
+      "thumbnail": "https://cdn.jsdelivr.net/gh/yazidrahimi7/ys-library-assets@ec357d9e9a51c3420af9b4f5b0975d1287f6cdfe/thumbnails/1001fonts-com-20261008125622.png",
+      "description": "",
+      "types": [
+        "Typography"
+      ],
+      "order": null,
+      "createdAt": "2023-05-28T01:55:00.000Z"
+    },
+    {
+      "id": "163430cd-25ca-4843-8e8e-29c2c1909d2f",
+      "title": "Google Fonts",
+      "url": "fonts.google.com",
+      "thumbnail": "",
+      "description": "The best website with free fonts",
+      "types": [
+        "Typography"
+      ],
+      "order": null,
+      "createdAt": "2023-05-01T11:56:00.000Z"
+    },
+    {
+      "id": "bb5a3e74-1e1d-4c5b-b03a-d9381a59ec1e",
+      "title": "unCut",
+      "url": "uncut.wtf",
+      "thumbnail": "",
+      "description": "Unique, free typefaces",
+      "types": [
+        "Typography"
+      ],
+      "order": null,
+      "createdAt": "2023-05-01T11:56:00.000Z"
+    },
+    {
+      "id": "2421f5b7-8d3e-46bb-a536-2d1e4d0fdfaf",
+      "title": "allfreefonts",
+      "url": "https://www.allfreefonts.co/",
+      "thumbnail": "https://cdn.jsdelivr.net/gh/yazidrahimi7/ys-library-assets@ca7388e8fc3513983d2183bb357fa902b5d6cc09/thumbnails/allfreefonts-co-20261008125613.png",
+      "description": "12k+ free fonts",
+      "types": [
+        "Typography"
+      ],
+      "order": null,
+      "createdAt": "2023-05-01T11:56:00.000Z"
+    },
+    {
+      "id": "9ecfbcce-2acf-4a6d-8fa7-c76872dc64e7",
+      "title": "Fontesk",
+      "url": "fontesk.com",
+      "thumbnail": "",
+      "description": "Some more free fonts",
+      "types": [
+        "Typography"
+      ],
+      "order": null,
+      "createdAt": "2023-05-01T11:56:00.000Z"
+    },
+    {
+      "id": "bfd71a33-89a9-40a9-b816-deae83855bd1",
+      "title": "Fontshare",
+      "url": "fontshare.com",
+      "thumbnail": "",
+      "description": "Very high quality, free fonts",
+      "types": [
+        "Typography"
+      ],
+      "order": null,
+      "createdAt": "2023-05-01T11:56:00.000Z"
+    },
+    {
+      "id": "01881a88-7dd5-4ff7-9f7c-a63f31955454",
+      "title": "YouWorkForThem",
+      "url": "https://youworkforthem.com?aff=1161",
+      "thumbnail": "https://cdn.jsdelivr.net/gh/yazidrahimi7/ys-library-assets@6bcdb94bb6d50bcecb28e685a2518d7368865b74/thumbnails/youworkforthem-com-20261008125627.png",
+      "description": "Another website with great fonts for purchase",
+      "types": [
+        "Typography"
+      ],
+      "order": null,
+      "createdAt": "2023-05-01T11:56:00.000Z"
+    },
+    {
+      "id": "738687e0-24b5-4723-8437-a21d158919c6",
+      "title": "PangramPangram",
+      "url": "pangrampangram.com",
+      "thumbnail": "",
+      "description": "One of my favorite foundries",
+      "types": [
+        "Typography"
+      ],
+      "order": null,
+      "createdAt": "2023-05-01T11:56:00.000Z"
+    },
+    {
+      "id": "a2f7857c-a408-4cac-b1e8-1bd2a094c69a",
+      "title": "DaFont",
+      "url": "dafont.com",
+      "thumbnail": "",
+      "description": "Iconic website with free fonts",
+      "types": [
+        "Typography"
+      ],
+      "order": null,
+      "createdAt": "2023-05-01T11:56:00.000Z"
+    },
+    {
+      "id": "0df6cdc8-9d5d-444a-8059-8624fd49f131",
+      "title": "MyFonts",
+      "url": "myfonts.com",
+      "thumbnail": "",
+      "description": "A library of fantastic paid fonts",
+      "types": [
+        "Typography"
+      ],
+      "order": null,
+      "createdAt": "2023-05-01T11:56:00.000Z"
     }
   ]
 }

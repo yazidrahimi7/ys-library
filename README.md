@@ -41,7 +41,7 @@ Submit form says it only works on the live site.
 
 ## Pages
 
-- **All** (`#all`): a **Featured** row (cards with ⭐ in the title), then up to
+- **All** (`#all`): a **Featured** row (cards tagged `Featured` in Notion), then up to
   8 cards from each category that has any, with a **View all** button when there are more.
 - **A category** (e.g. `#web`): every card in that category.
 - **Search**: type in the search bar to search titles, descriptions, links and
@@ -65,7 +65,7 @@ Cards are managed in the **library CMS** Notion database.
 | `url` | Where the card links (opens in a new tab) |
 | `thumbnail` | Image link for the card. Leave empty to get an automatic screenshot |
 | `description` | Card description |
-| `type` | Categories the card appears in (tag names must match the sidebar names in `js/config.js`) |
+| `type` | Categories the card appears in (tag names must match the sidebar names in `js/config.js`). Add the **Featured** tag to also show it in the Featured row |
 | `Published` | Only checked rows appear on the site |
 | `order` | Optional Number column. Position: 1 first, 2 second… Empty = after numbered cards |
 
@@ -113,7 +113,7 @@ within a minute. To reject it, delete the row.
 Built-in protection against junk:
 - Links must start with `http://` or `https://`, and fields have length limits.
 - The category must be one of the existing `type` tags (visitors can't create new tags).
-- Visitors can't add ⭐ to pin their own submission.
+- Visitors can't add ⭐ to pin their own submission, or pick the Featured tag.
 - A hidden "spam trap" field catches simple bots.
 
 ## Setup

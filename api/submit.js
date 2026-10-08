@@ -11,6 +11,9 @@
 
 import { createSubmission, fetchTypeNames } from "../lib/notion.js";
 
+// Tags visitors can't choose — only you set these in Notion (lowercase)
+const OWNER_ONLY_TYPES = ["featured"];
+
 // Length limits for each field (characters)
 const LIMITS = { url: 500, title: 100, description: 300, thumbnail: 500 };
 
@@ -33,7 +36,10 @@ export default async function handler(req, res) {
     const submission = clean(body);
     if (submission.error) return res.status(400).json({ error: submission.error });
 
-    const allowedTypes = await fetchTypeNames(notion);
+    // Any existing "type" tag except the ones only you should set (e.g. Featured)
+    const allowedTypes = (await fetchTypeNames(notion)).filter(
+      (t) => !OWNER_ONLY_TYPES.includes(t.toLowerCase())
+    );
     if (!allowedTypes.includes(submission.type)) {
       return res.status(400).json({ error: "Please choose a category from the list." });
     }

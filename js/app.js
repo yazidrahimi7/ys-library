@@ -111,10 +111,10 @@ function renderContent() {
     return;
   }
 
-  // "All": Featured (⭐ cards) + a preview of every category that has cards
+  // "All": Featured (cards tagged "Featured" in Notion) + a preview of every category
   if (state.activeId === "all") {
     document.title = config.siteName;
-    const featured = sortCards(state.cards.filter(isStarred));
+    const featured = sortCards(state.cards.filter(isFeatured));
     if (featured.length) content.append(section("Featured", featured));
 
     for (const cat of allCategories) {
@@ -215,7 +215,13 @@ function isStarred(card) {
   return card.title.includes("⭐") ? 1 : 0;
 }
 
-// The ⭐ only marks Featured cards — don't show it in the title
+// Tagged with config.featuredTag (e.g. "Featured") in Notion's "type" column
+function isFeatured(card) {
+  const tag = config.featuredTag.toLowerCase();
+  return card.types.some((t) => t.toLowerCase() === tag);
+}
+
+// The ⭐ only pins a card to the top of its lists — don't show it in the title
 function displayTitle(title) {
   return title.replace(/⭐/g, "").trim();
 }
