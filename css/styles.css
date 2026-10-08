@@ -150,6 +150,7 @@ a { color: inherit; }
 
 .search {
   flex: 1;
+  min-width: 0;                 /* let it shrink so the buttons beside it fit */
   display: flex;
   align-items: center;
   gap: 14px;
@@ -349,6 +350,7 @@ a { color: inherit; }
    Mobile  (up to 767px):   1 card per row
    ============================================================ */
 .menu-btn,
+.submit-btn,
 .sidebar-close,
 .sidebar-backdrop { display: none; }
 
@@ -379,8 +381,12 @@ a { color: inherit; }
   }
   .sidebar.is-open + .sidebar-backdrop { opacity: 1; pointer-events: auto; }
 
-  .menu-btn, .sidebar-close { display: inline-grid; }
-  .menu-btn { width: 56px; height: 56px; background: var(--mid); color: var(--text); }
+  .menu-btn, .submit-btn, .sidebar-close { display: inline-grid; }
+  .menu-btn,
+  .submit-btn { flex-shrink: 0; width: 56px; height: 56px; background: var(--mid); color: var(--text); }
+
+  /* Submit lives next to the search bar here, so hide the sidebar's Submit card */
+  .promo { display: none; }
 }
 
 @media (max-width: 767px) {
@@ -389,7 +395,7 @@ a { color: inherit; }
   .main { padding-top: 16px; }
   .search { height: 48px; padding: 0 14px; }
   .search input { font-size: 16px; }
-  .menu-btn { width: 48px; height: 48px; }
+  .menu-btn, .submit-btn { width: 48px; height: 48px; }
   .section { margin-top: 32px; }
   .section-title { font-size: 24px; }
 }
