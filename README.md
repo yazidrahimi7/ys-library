@@ -1,7 +1,7 @@
 # Library
 
 A design inspiration library: website cards sorted by category, managed in Notion.
-Live at https://ys-library-iota.vercel.app
+Live at https://ylibrary.vercel.app
 
 Plain HTML, CSS and JavaScript — **no framework, no build step, no install.**
 Open the files in any editor (VS Code, Notepad++, etc.), change something, refresh the browser.
@@ -62,7 +62,7 @@ Cards are managed in the **library CMS** Notion database.
 | Notion column | Used for |
 |---|---|
 | `title` | Card title. Put **⭐** in it to pin the card to the top |
-| `url` | Where the card links (opens in a new tab) |
+| `url` | Where the card links (opens in a new tab). `https://` is added if missing |
 | `thumbnail` | Image link for the card. Leave empty to get an automatic screenshot |
 | `description` | Card description |
 | `type` | Categories the card appears in (tag names must match the sidebar names in `js/config.js`). Add the **Featured** tag to also show it in the Featured row |

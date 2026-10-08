@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-10-08T13:03:07.603Z",
+  "syncedAt": "2026-10-08T23:28:55.630Z",
   "cards": [
     {
       "id": "3f3b3237-87d7-80e3-8733-d19cbb6802ce",
@@ -112,7 +112,7 @@
     {
       "id": "163430cd-25ca-4843-8e8e-29c2c1909d2f",
       "title": "Google Fonts",
-      "url": "fonts.google.com",
+      "url": "https://fonts.google.com",
       "thumbnail": "",
       "description": "The best website with free fonts",
       "types": [
@@ -124,7 +124,7 @@
     {
       "id": "bb5a3e74-1e1d-4c5b-b03a-d9381a59ec1e",
       "title": "unCut",
-      "url": "uncut.wtf",
+      "url": "https://uncut.wtf",
       "thumbnail": "",
       "description": "Unique, free typefaces",
       "types": [
@@ -148,7 +148,7 @@
     {
       "id": "9ecfbcce-2acf-4a6d-8fa7-c76872dc64e7",
       "title": "Fontesk",
-      "url": "fontesk.com",
+      "url": "https://fontesk.com",
       "thumbnail": "",
       "description": "Some more free fonts",
       "types": [
@@ -160,7 +160,7 @@
     {
       "id": "bfd71a33-89a9-40a9-b816-deae83855bd1",
       "title": "Fontshare",
-      "url": "fontshare.com",
+      "url": "https://fontshare.com",
       "thumbnail": "",
       "description": "Very high quality, free fonts",
       "types": [
@@ -184,7 +184,7 @@
     {
       "id": "738687e0-24b5-4723-8437-a21d158919c6",
       "title": "PangramPangram",
-      "url": "pangrampangram.com",
+      "url": "https://pangrampangram.com",
       "thumbnail": "",
       "description": "One of my favorite foundries",
       "types": [
@@ -196,7 +196,7 @@
     {
       "id": "a2f7857c-a408-4cac-b1e8-1bd2a094c69a",
       "title": "DaFont",
-      "url": "dafont.com",
+      "url": "https://dafont.com",
       "thumbnail": "",
       "description": "Iconic website with free fonts",
       "types": [
@@ -208,7 +208,7 @@
     {
       "id": "0df6cdc8-9d5d-444a-8059-8624fd49f131",
       "title": "MyFonts",
-      "url": "myfonts.com",
+      "url": "https://myfonts.com",
       "thumbnail": "",
       "description": "A library of fantastic paid fonts",
       "types": [
