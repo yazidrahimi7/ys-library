@@ -1,11 +1,47 @@
 {
-  "syncedAt": "2026-10-08T06:08:46.539Z",
+  "syncedAt": "2026-10-08T12:35:12.188Z",
   "cards": [
+    {
+      "id": "3f3b3237-87d7-80e3-8733-d19cbb6802ce",
+      "title": "Typescale",
+      "url": "https://typescale.com/",
+      "thumbnail": "",
+      "description": "",
+      "types": [
+        "Typography"
+      ],
+      "order": null,
+      "createdAt": "2026-10-08T12:18:00.000Z"
+    },
+    {
+      "id": "3f3b3237-87d7-80c8-9ff2-c7443dba7626",
+      "title": "Toolfolio",
+      "url": "https://toolfolio.com/",
+      "thumbnail": "https://cdn.jsdelivr.net/gh/yazidrahimi7/ys-library-assets@2fa1481d0943c4d415e250063b77a036f3ff9b2f/thumbnails/toolfolio-com-20261008094937.png",
+      "description": "",
+      "types": [
+        "Tools & resources"
+      ],
+      "order": null,
+      "createdAt": "2026-10-08T09:37:00.000Z"
+    },
+    {
+      "id": "3f3b3237-87d7-81da-ac2b-e2960917fd82",
+      "title": "Curations supply",
+      "url": "https://curations.supply/",
+      "thumbnail": "https://cdn.jsdelivr.net/gh/yazidrahimi7/ys-library-assets@2957233e9af78a613220dc17969b4390adf7ee17/thumbnails/curations-supply-20261008093355.png",
+      "description": "Directory of curations",
+      "types": [
+        "Tools & resources"
+      ],
+      "order": null,
+      "createdAt": "2026-10-08T09:11:00.000Z"
+    },
     {
       "id": "3f3b3237-87d7-810f-ade6-e9cada052652",
       "title": "fast.com",
       "url": "https://www.fast.com",
-      "thumbnail": "",
+      "thumbnail": "https://cdn.jsdelivr.net/gh/yazidrahimi7/ys-library-assets@5192ece89c791492a7297e3bfaa76eeb6bbbe443/thumbnails/fast-com-20261008093242.png",
       "description": "",
       "types": [
         "Web"
@@ -14,22 +50,10 @@
       "createdAt": "2026-10-08T05:58:00.000Z"
     },
     {
-      "id": "3f3b3237-87d7-80d7-b8e1-cb75201b156b",
-      "title": "⭐ linkedin",
-      "url": "https://www.linkedin.com/feed/",
-      "thumbnail": "",
-      "description": "",
-      "types": [
-        "Web"
-      ],
-      "order": null,
-      "createdAt": "2026-10-08T05:07:00.000Z"
-    },
-    {
       "id": "3f3b3237-87d7-8088-9cb6-c6e45da09d1b",
       "title": "⭐ Google (2)",
       "url": "https://www.google.com.my",
-      "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXr8HcfWmB_FXa0eDg9L5ni_0wTBUFomjHwNej3oZY9A&s=10",
+      "thumbnail": "https://cdn.jsdelivr.net/gh/yazidrahimi7/ys-library-assets@e5c799bbdc9a118267962d754ce7f14dc297111b/thumbnails/google-com-my-20261008094843.png",
       "description": "this is a test",
       "types": [
         "Web"
@@ -38,28 +62,16 @@
       "createdAt": "2026-10-08T04:53:00.000Z"
     },
     {
-      "id": "3f3b3237-87d7-80d1-bca8-ceb0d2f3d6c8",
-      "title": "Google (1)",
-      "url": "https://www.google.com.my",
-      "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXr8HcfWmB_FXa0eDg9L5ni_0wTBUFomjHwNej3oZY9A&s=10",
-      "description": "this is a test",
+      "id": "96685276-080e-4da1-85e7-ad04f7a84cb4",
+      "title": "Free Faces",
+      "url": "https://www.freefaces.gallery/?ref=uxdesignweekly",
+      "thumbnail": "",
+      "description": "",
       "types": [
-        "Web"
+        "Typography"
       ],
       "order": null,
-      "createdAt": "2026-10-08T04:53:00.000Z"
-    },
-    {
-      "id": "3f3b3237-87d7-80b3-86e0-d05dfad8a64e",
-      "title": "Google",
-      "url": "https://www.google.com.my",
-      "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXr8HcfWmB_FXa0eDg9L5ni_0wTBUFomjHwNej3oZY9A&s=10",
-      "description": "this is a test",
-      "types": [
-        "Web"
-      ],
-      "order": null,
-      "createdAt": "2026-10-08T04:46:00.000Z"
+      "createdAt": "2024-03-16T04:18:00.000Z"
     }
   ]
 }

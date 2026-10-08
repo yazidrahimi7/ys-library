@@ -67,7 +67,7 @@ Cards are managed in the **library CMS** Notion database.
 | `description` | Card description |
 | `type` | Categories the card appears in (tag names must match the sidebar names in `js/config.js`) |
 | `Published` | Only checked rows appear on the site |
-| `order` | Position: 1 first, 2 second… Empty = after numbered cards |
+| `order` | Optional Number column. Position: 1 first, 2 second… Empty = after numbered cards |
 
 Card order in each category: ⭐ cards first → then `order` → then newest.
 
