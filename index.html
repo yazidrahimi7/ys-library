@@ -7,63 +7,67 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/styles.css" />
+    <!-- Feather icons (https://feathericons.com). Use: <i data-feather="search"></i> -->
+    <script src="https://unpkg.com/feather-icons@4.29.2/dist/feather.min.js"></script>
   </head>
   <body>
-    <!-- ============ HEADER ============ -->
-    <header class="header">
-      <a class="logo" href="#">
-        <svg class="logo-mark" viewBox="0 0 48 48" aria-hidden="true">
-          <rect x="2" y="2" width="44" height="44" rx="9" fill="currentColor" />
-          <path d="M14 18c0 7 3 10 7 10s6-3 6-8m0 0v12c0 4-3 7-8 7" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" />
-          <circle cx="33" cy="15" r="3" fill="#fff" />
-        </svg>
-        <span class="logo-text" data-site-name>Library</span>
-      </a>
-      <button class="btn btn-primary" data-open-submit>
-        <span class="btn-plus" aria-hidden="true">+</span> Submit
-      </button>
-    </header>
+    <div class="app">
+      <!-- ============ SIDEBAR ============ -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-top">
+          <a class="logo" href="#all" aria-label="Library home">
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+              <rect x="2" y="2" width="44" height="44" rx="10" fill="#fff" />
+              <path d="M14 18c0 7 3 10 7 10s6-3 6-8m0 0v12c0 4-3 7-8 7" fill="none" stroke="#0c0c0c" stroke-width="3.4" stroke-linecap="round" />
+              <circle cx="33" cy="15" r="3" fill="#0c0c0c" />
+            </svg>
+          </a>
+          <!-- Only visible on tablet/mobile, where the sidebar slides in -->
+          <button class="icon-btn sidebar-close" id="sidebar-close" aria-label="Close menu">
+            <i data-feather="x"></i>
+          </button>
+        </div>
 
-    <!-- ============ MAIN ============ -->
-    <div class="layout">
-      <aside class="sidebar">
-        <h2 class="sidebar-title">Categories</h2>
         <!-- Filled in by app.js from config.js -->
-        <nav id="category-nav"></nav>
-      </aside>
+        <nav class="nav" id="nav"></nav>
 
-      <main class="content">
-        <h1 class="page-title" id="page-title"></h1>
-        <hr class="divider" />
-        <!-- Cards are rendered here by app.js -->
-        <div class="grid" id="grid"></div>
+        <!-- Submit card -->
+        <div class="promo">
+          <div class="promo-art" aria-hidden="true"></div>
+          <p class="promo-heading" data-text="promo.heading"></p>
+          <p class="promo-text" data-text="promo.text"></p>
+          <button class="btn-pill" data-open-submit>
+            <i data-feather="plus"></i> Submit
+          </button>
+        </div>
+      </aside>
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- ============ MAIN ============ -->
+      <main class="main">
+        <div class="topbar">
+          <button class="icon-btn menu-btn" id="menu-btn" aria-label="Open menu">
+            <i data-feather="menu"></i>
+          </button>
+          <label class="search">
+            <i data-feather="search"></i>
+            <input id="search" type="search" autocomplete="off" aria-label="Search websites" />
+          </label>
+        </div>
+
+        <!-- Sections of cards are rendered here by app.js -->
+        <div id="content"></div>
+
+        <footer class="credit">
+          <span data-text="credit.text"></span>
+          <a id="credit-link" target="_blank" rel="noopener"></a>
+        </footer>
       </main>
     </div>
-
-    <!-- ============ FOOTER ============ -->
-    <footer class="footer">
-      <svg class="rings" viewBox="0 0 1200 1200" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-        <!-- All rings share the biggest size; CSS shrinks them and grows them outward -->
-        <circle cx="600" cy="600" r="580" />
-        <circle cx="600" cy="600" r="580" />
-        <circle cx="600" cy="600" r="580" />
-        <circle cx="600" cy="600" r="580" />
-        <circle cx="600" cy="600" r="580" />
-      </svg>
-      <div class="footer-cta">
-        <h2 class="footer-heading" data-footer="heading"></h2>
-        <p class="footer-text" data-footer="text"></p>
-        <button class="btn btn-primary" data-open-submit>Submit</button>
-      </div>
-      <div class="footer-bottom">
-        <span data-footer="credit"></span>
-        <a data-footer="link" target="_blank" rel="noopener"></a>
-      </div>
-    </footer>
 
     <!-- ============ SUBMIT DIALOG ============ -->
     <!-- Sends to api/submit.js, which adds an unpublished row in Notion -->
@@ -71,7 +75,9 @@
       <form id="submit-form" novalidate>
         <div class="dialog-head">
           <h3>Submit a website</h3>
-          <button type="button" class="icon-btn" data-close aria-label="Close">×</button>
+          <button type="button" class="icon-btn" data-close aria-label="Close">
+            <i data-feather="x"></i>
+          </button>
         </div>
 
         <p class="dialog-note">Submissions are reviewed before they appear on the site.</p>

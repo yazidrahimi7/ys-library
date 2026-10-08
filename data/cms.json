@@ -1,9 +1,21 @@
 {
-  "syncedAt": "2026-10-08T05:11:34.497Z",
+  "syncedAt": "2026-10-08T06:08:46.539Z",
   "cards": [
     {
+      "id": "3f3b3237-87d7-810f-ade6-e9cada052652",
+      "title": "fast.com",
+      "url": "https://www.fast.com",
+      "thumbnail": "",
+      "description": "",
+      "types": [
+        "Web"
+      ],
+      "order": null,
+      "createdAt": "2026-10-08T05:58:00.000Z"
+    },
+    {
       "id": "3f3b3237-87d7-80d7-b8e1-cb75201b156b",
-      "title": "linkedin",
+      "title": "⭐ linkedin",
       "url": "https://www.linkedin.com/feed/",
       "thumbnail": "",
       "description": "",

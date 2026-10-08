@@ -4,30 +4,37 @@
   ============================================================
 
   - Add / rename / remove categories in `groups` below.
-  - `id` is used internally to tag saved links. Keep it short, lowercase,
-    no spaces. If you rename an `id`, links already saved under the old
-    id will no longer show up in that category.
-  - `title` is the big heading shown above the cards for that category.
-    If you leave it out, the category name is used instead.
+  - A category's `name` must match a "type" tag in the Notion database
+    exactly (e.g. "Web"), or its cards won't show up there.
+  - `id` is used in the page address (#web). Keep it short, lowercase,
+    no spaces.
+  - `open: true` shows a group expanded when the page loads.
 */
 
 window.LIBRARY_CONFIG = {
   siteName: "Library",
 
-  footer: {
-    heading: "Know a great design website?",
-    text: "Help the community discover outstanding design inspiration by submitting your favorite website",
-    credit: "Designed and built by Yazid",
-    linkLabel: "Visit yazidrahimi.com",
+  searchPlaceholder: 'Try "dark designs"',
+
+  // The card at the bottom of the sidebar
+  promo: {
+    heading: "Have a nice idea?",
+    text: "Submit here",
+  },
+
+  credit: {
+    text: "Designed and built by Yazid",
+    linkLabel: "yazidrahimi.com",
     linkUrl: "https://yazidrahimi.com",
   },
 
   groups: [
     {
-      name: "Inspirations",
+      name: "Inspiration",
+      open: true,
       categories: [
-        { id: "web", name: "Web", title: "UI/UX Inspo" },
-        { id: "mobile", name: "Mobile", title: "Mobile Inspo" },
+        { id: "web", name: "Web" },
+        { id: "mobile", name: "Mobile" },
         { id: "video", name: "Video" },
         { id: "portfolio", name: "Portfolio" },
       ],
@@ -42,7 +49,7 @@ window.LIBRARY_CONFIG = {
       ],
     },
     {
-      name: "Tools",
+      name: "Tools & resource",
       categories: [
         { id: "tools", name: "Tools & resources" },
         { id: "figma", name: "Figma" },

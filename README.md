@@ -22,15 +22,26 @@ Submit form says it only works on the live site.
 
 | File | What it does | Edit it to… |
 |---|---|---|
-| `js/config.js` | Site name, footer text, **categories** | add/rename categories, change footer text |
-| `css/styles.css` | All styling. Colors & fonts are at the top (`:root`) | change colors, fonts, spacing |
+| `js/config.js` | Site text, search placeholder, **categories and sidebar groups** | add/rename categories, change text |
+| `css/styles.css` | All styling. Colors, font and sizes are at the top (`:root`) | change colors, fonts, spacing, cards per row |
 | `index.html` | Page structure and the Submit form | add fields or sections |
-| `js/app.js` | Shows the cards, sends the Submit form | change behavior |
+| `js/app.js` | Sidebar, Featured/category sections, search, Submit form | change behavior (e.g. `PREVIEW_COUNT`) |
 | `lib/notion.js` | Reads and adds rows in Notion (used by the files below) | change Notion column names (`PROPS` at the top) |
 | `api/cards.js` | Live Notion cards on Vercel (`/api/cards`) | cache time (`CACHE_SECONDS`) |
 | `api/submit.js` | Adds visitor submissions to Notion, unpublished (`/api/submit`) | length limits (`LIMITS`) |
 | `scripts/sync-notion.mjs` | Saves Notion cards to `data/cms.json` (`npm run sync`) | — |
 | `data/cms.json` | Saved copy of the Notion cards, used locally and as backup | don't edit by hand |
+
+## Pages
+
+- **All** (`#all`): a **Featured** row (cards with ⭐ in the title), then up to
+  8 cards from each category that has any, with a **View all** button when there are more.
+- **A category** (e.g. `#web`): every card in that category.
+- **Search**: type in the search bar to search titles, descriptions, links and
+  categories across all cards. `Esc` clears it.
+
+Icons are from [Feather](https://feathericons.com): write `<i data-feather="name"></i>`
+in the HTML, or `icon("name")` in `js/app.js`.
 
 ## Cards from Notion (headless CMS)
 
