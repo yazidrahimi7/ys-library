@@ -144,7 +144,7 @@ function section(title, cards, { note, empty, viewAll } = {}) {
   const head = el("div", "section-head");
   head.append(el("h2", "section-title", title));
   if (viewAll) {
-    const link = el("a", "btn btn-ghost view-all", "View all");
+    const link = el("a", "view-all", "View all");
     link.href = "#" + viewAll;
     link.append(icon("arrow-right"));
     head.append(link);
