@@ -405,8 +405,6 @@ function fillStaticText() {
     const [section, key] = n.dataset.text.split(".");
     n.textContent = config[section][key];
   });
-  $("#credit-link").textContent = config.credit.linkLabel;
-  $("#credit-link").href = config.credit.linkUrl;
   searchInput.placeholder = config.searchPlaceholder;
 }
 

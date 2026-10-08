@@ -22,12 +22,6 @@ window.LIBRARY_CONFIG = {
     text: "Submit here",
   },
 
-  credit: {
-    text: "Designed and built by Yazid",
-    linkLabel: "yazidrahimi.com",
-    linkUrl: "https://yazidrahimi.com",
-  },
-
   groups: [
     {
       name: "Inspiration",
