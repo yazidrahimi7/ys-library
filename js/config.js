@@ -11,7 +11,7 @@
   - `open: true` shows a group expanded when the page loads.
   - `layout: "gallery"` shows the category as an image gallery (masonry)
     instead of website cards, and its Submit button becomes an Upload
-    button (see api/upload.js — only you can upload, with your upload key).
+    button (see api/upload.js — only you can upload, with your password).
 */
 
 window.LIBRARY_CONFIG = {

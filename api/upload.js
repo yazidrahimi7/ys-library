@@ -2,12 +2,13 @@
   ============================================================
   POST /api/upload — you add an image to the Screenshots gallery.
   ============================================================
-  Only for you: the request must include your upload key (the
-  UPLOAD_KEY Environment Variable in Vercel). The images go into the
+  Only for you: the request must include your password (the
+  UPLOAD_PASSWORD Environment Variable in Vercel — never put the
+  password itself in the code, this repo is public). The images go into the
   public GitHub assets repo, so random visitors must not be able to
   add files there.
 
-  Steps: check the key → check the image → save it in the assets repo
+  Steps: check the password → check the image → save it in the assets repo
   (screenshots/ folder) → add a published row in Notion tagged
   GALLERY_TYPE with the image link in "thumbnail".
 
@@ -33,10 +34,10 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Use POST" });
   }
 
-  const key = process.env.UPLOAD_KEY;
-  if (!key) return res.status(500).json({ error: "Uploads aren't set up (UPLOAD_KEY missing)" });
-  if (!sameText(String(req.headers["x-upload-key"] || ""), key)) {
-    return res.status(401).json({ error: "Wrong upload key" });
+  const password = process.env.UPLOAD_PASSWORD;
+  if (!password) return res.status(500).json({ error: "Uploads aren't set up (UPLOAD_PASSWORD missing)" });
+  if (!sameText(String(req.headers["x-upload-password"] || ""), password)) {
+    return res.status(401).json({ error: "Wrong password" });
   }
 
   const body = typeof req.body === "object" && req.body ? req.body : {};

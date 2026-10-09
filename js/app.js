@@ -420,7 +420,7 @@ function showForm() {
     $("#form-title").textContent = "Upload a screenshot";
     $("#send-btn").textContent = "Upload";
     $("#title-input").placeholder = "Optional";
-    $("#key-field").hidden = Boolean(savedKey());
+    $("#password-field").hidden = Boolean(savedPassword());
     setPickedImage(null);
   } else {
     $("#form-title").textContent = "Submit a website";
@@ -490,13 +490,13 @@ async function submitWebsite() {
 
 async function uploadImage() {
   if (!pickedImage) throw new Error("Please choose an image.");
-  const key = $("#key-input").value.trim() || savedKey();
-  if (!key) throw new Error("Please enter your upload key.");
+  const password = $("#password-input").value || savedPassword();
+  if (!password) throw new Error("Please enter your password.");
 
   const image = await shrinkImage(pickedImage);
   const res = await fetch("api/upload", {
     method: "POST",
-    headers: { "Content-Type": "application/json", "X-Upload-Key": key },
+    headers: { "Content-Type": "application/json", "X-Upload-Password": password },
     body: JSON.stringify({
       image,
       title: $("#title-input").value,
@@ -506,13 +506,13 @@ async function uploadImage() {
   const reply = await res.json().catch(() => ({}));
 
   if (res.status === 401) {
-    saveKey("");                      // forget a wrong key and ask again
-    $("#key-field").hidden = false;
-    throw new Error("That upload key isn't right.");
+    savePassword("");                 // forget a wrong password and ask again
+    $("#password-field").hidden = false;
+    throw new Error("That password isn't right.");
   }
   if (!res.ok) throw new Error(reply.error || submitErrorFor(res.status));
 
-  saveKey(key);
+  savePassword(password);
   // Show it right away (the card list from Notion refreshes within a minute)
   state.cards.push(prepareCard(reply.card));
   renderContent();
@@ -556,12 +556,12 @@ function setPickedImage(file) {
 }
 $("#image-input").addEventListener("change", (e) => setPickedImage(e.target.files[0] || null));
 
-// The upload key is remembered in this browser only
-function savedKey() {
-  try { return localStorage.getItem("uploadKey") || ""; } catch { return ""; }
+// The password is remembered in this browser only, after it works once
+function savedPassword() {
+  try { return localStorage.getItem("uploadPassword") || ""; } catch { return ""; }
 }
-function saveKey(key) {
-  try { key ? localStorage.setItem("uploadKey", key) : localStorage.removeItem("uploadKey"); } catch {}
+function savePassword(password) {
+  try { password ? localStorage.setItem("uploadPassword", password) : localStorage.removeItem("uploadPassword"); } catch {}
 }
 
 // Message for errors that don't come with one (e.g. no API when running locally)

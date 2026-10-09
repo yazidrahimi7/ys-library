@@ -104,7 +104,7 @@ with access to **only** `ys-library-assets` and **Contents: Read and write**. In
 - `GITHUB_TOKEN` = that token
 - `GITHUB_ASSETS_REPO` = `yazidrahimi7/ys-library-assets`
 - `CRON_SECRET` = any long random text (protects the daily catch-up run)
-- `UPLOAD_KEY` = a long secret only you know (for uploading to the Screenshots gallery)
+- `UPLOAD_PASSWORD` = your upload password (for uploading to the Screenshots gallery)
 
 ## Screenshots gallery
 
@@ -113,12 +113,12 @@ masonry layout — 4 columns on desktop, 3 on tablet, 2 on phones (`--gallery-co
 `css/styles.css`). Click an image to view it enlarged; use the arrows or ←/→ keys to browse.
 
 **Uploading (only you):** on the Screenshots page the Submit button becomes **Upload**.
-Choose an image, optionally add a title/description, and enter your upload key (asked once;
+Choose an image, optionally add a title/description, and enter your password (asked once;
 the browser remembers it). The image is shrunk to a JPEG (max 1200px wide) in the browser,
 saved in the assets repo under `screenshots/`, and added to Notion as a published row
 tagged `Screenshots`. It appears in the gallery right away.
 
-Setup: in Vercel add `UPLOAD_KEY` = a long secret only you know. Without it, nobody
+Setup: in Vercel add `UPLOAD_PASSWORD` = your password. Never put the password in the code — this repo is public. Without it, nobody
 (including you) can upload — the assets repo is public, so uploads must be locked.
 
 You can also add gallery images straight in Notion: a row with `type` = Screenshots,

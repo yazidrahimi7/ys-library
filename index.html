@@ -71,7 +71,7 @@
     <!-- ============ SUBMIT / UPLOAD DIALOG ============ -->
     <!-- Two modes (set by app.js):
          "website" → api/submit.js adds an unpublished row in Notion
-         "upload"  → api/upload.js adds an image to the gallery (needs your upload key)
+         "upload"  → api/upload.js adds an image to the gallery (needs your password)
          Elements with data-only="website" / "upload" only show in that mode. -->
     <dialog class="dialog" id="form-dialog">
       <form id="submit-form" novalidate>
@@ -129,9 +129,9 @@
         </label>
 
         <!-- Upload mode: only asked once; the browser remembers it afterwards -->
-        <label class="field" data-only="upload" id="key-field">
-          <span>Upload key</span>
-          <input type="password" id="key-input" autocomplete="current-password" />
+        <label class="field" data-only="upload" id="password-field">
+          <span>Password</span>
+          <input type="password" id="password-input" autocomplete="current-password" />
         </label>
 
         <!-- Spam trap: hidden from people, bots tend to fill it in -->
