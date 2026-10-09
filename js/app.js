@@ -270,10 +270,10 @@ function displayTitle(title) {
   return title.replace(/⭐/g, "").trim();
 }
 
-// Search looks at the title, description, link and categories
+// Search looks at the title, description, link, categories and tags
 function matches(card, query) {
   const words = query.toLowerCase().split(/\s+/).filter(Boolean);
-  const text = [card.title, card.description, card.url, ...card.types].join(" ").toLowerCase();
+  const text = [card.title, card.description, card.url, ...card.types, ...(card.tags || [])].join(" ").toLowerCase();
   return words.every((w) => text.includes(w));
 }
 
@@ -316,7 +316,10 @@ const viewer = { items: [], index: 0 };
 function openLightbox(items, index) {
   viewer.items = items;
   showImage(index);
-  if (!lightbox.open) lightbox.showModal();
+  if (!lightbox.open) {
+    lightbox.showModal();
+    $(".lightbox-figure").focus();   // not the ✕, which would show a focus ring
+  }
 }
 
 function showImage(index) {
@@ -325,7 +328,10 @@ function showImage(index) {
   const item = viewer.items[viewer.index];
   $("#lightbox-img").src = item.thumbnail;
   $("#lightbox-img").alt = displayTitle(item.title);
-  $("#lightbox-caption").textContent = [displayTitle(item.title), item.description].filter(Boolean).join(" — ");
+  const caption = $("#lightbox-caption");
+  caption.innerHTML = "";
+  if (item.tags?.length) caption.append(tagList(item.tags));
+  else caption.textContent = [displayTitle(item.title), item.description].filter(Boolean).join(" — ");
   lightbox.classList.toggle("is-single", n < 2);
 }
 
@@ -406,6 +412,10 @@ function openForm() {
   if (formMode() === "website") {
     form.url.focus();
     showQuotaNote();
+  } else {
+    // Focus the title, not the ✕ (which would show a focus ring) or an
+    // input (which would pop up the phone keyboard)
+    $("#form-title").focus();
   }
 }
 
@@ -419,13 +429,12 @@ function showForm() {
   if (mode === "upload") {
     $("#form-title").textContent = "Upload a screenshot";
     $("#send-btn").textContent = "Upload";
-    $("#title-input").placeholder = "Optional";
+    $("#tags-preview").innerHTML = "";
     $("#password-field").hidden = Boolean(savedPassword());
     setPickedImage(null);
   } else {
     $("#form-title").textContent = "Submit a website";
     $("#send-btn").textContent = "Submit";
-    $("#title-input").placeholder = "Leave empty to use the domain name";
     const active = activeCategory();
     if (active && !isGallery(active)) form.type.value = active.name;
   }
@@ -499,8 +508,7 @@ async function uploadImage() {
     headers: { "Content-Type": "application/json", "X-Upload-Password": password },
     body: JSON.stringify({
       image,
-      title: $("#title-input").value,
-      description: form.querySelector("[name=description]").value,
+      tags: tagsFrom($("#tags-input").value),
     }),
   });
   const reply = await res.json().catch(() => ({}));
@@ -542,6 +550,33 @@ async function shrinkImage(file) {
     URL.revokeObjectURL(url);
   }
 }
+
+// "Onboarding, fintech , #Dark,,onboarding" → ["Onboarding", "fintech", "Dark"]
+// (same rules as cleanTags() in api/upload.js: max 10 tags, 30 characters each)
+function tagsFrom(text) {
+  const seen = new Set();
+  const tags = [];
+  for (const part of text.split(",")) {
+    const tag = part.trim().replace(/^#+/, "").replace(/\s+/g, " ").trim().slice(0, 30);
+    if (!tag || seen.has(tag.toLowerCase())) continue;
+    seen.add(tag.toLowerCase());
+    tags.push(tag);
+    if (tags.length === 10) break;
+  }
+  return tags;
+}
+
+// Tags as small chips
+function tagList(tags) {
+  const list = el("div", "tag-list");
+  tags.forEach((t) => list.append(el("span", "tag", t)));
+  return list;
+}
+
+// While typing, show the tags that will be saved
+$("#tags-input").addEventListener("input", (e) => {
+  $("#tags-preview").replaceChildren(...tagList(tagsFrom(e.target.value)).children);
+});
 
 // Show the chosen image in the picker
 let previewUrl = null;

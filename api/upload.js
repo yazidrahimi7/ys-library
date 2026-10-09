@@ -10,7 +10,7 @@
 
   Steps: check the password → check the image → save it in the assets repo
   (screenshots/ folder) → add a published row in Notion tagged
-  GALLERY_TYPE with the image link in "thumbnail".
+  GALLERY_TYPE, with the image link in "thumbnail" and your tags in "tags".
 
   The browser shrinks the image before sending it (see js/app.js),
   because Vercel accepts at most ~4.5 MB per request.
@@ -25,7 +25,9 @@ import { saveImageToGitHub } from "../lib/github.js";
 const GALLERY_TYPE = "Screenshots";
 
 const MAX_IMAGE_BYTES = 3 * 1024 * 1024;
-const LIMITS = { title: 100, description: 300 };
+// Tags: at most this many, each at most this long (characters)
+const MAX_TAGS = 10;
+const MAX_TAG_LENGTH = 30;
 
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
@@ -45,19 +47,16 @@ export default async function handler(req, res) {
   if (!image) return res.status(400).json({ error: "Please choose a JPG, PNG or WebP image." });
   if (image.bytes.length > MAX_IMAGE_BYTES) return res.status(400).json({ error: "That image is too large." });
 
-  const str = (v) => (typeof v === "string" ? v.trim() : "");
-  const title = str(body.title).replace(/⭐/g, "").trim() || `Screenshot ${new Date().toISOString().slice(0, 10)}`;
-  const description = str(body.description);
-  if (title.length > LIMITS.title || description.length > LIMITS.description) {
-    return res.status(400).json({ error: "The title or description is too long." });
-  }
+  const tags = cleanTags(body.tags);
+  // Notion needs a title; images get an automatic one, e.g. "Screenshot 2026-10-09"
+  const title = `Screenshot ${new Date().toISOString().slice(0, 10)}`;
 
   try {
     const github = { token: process.env.GITHUB_TOKEN, repo: process.env.GITHUB_ASSETS_REPO };
-    const imageUrl = await saveImageToGitHub(github, slug(title), image, "screenshots");
+    const imageUrl = await saveImageToGitHub(github, slug(tags[0] || "screenshot"), image, "screenshots");
     const card = await createImageRow(
       { token: process.env.NOTION_TOKEN, databaseId: process.env.NOTION_DATABASE_ID },
-      { title, description, type: GALLERY_TYPE, imageUrl }
+      { title, tags, type: GALLERY_TYPE, imageUrl }
     );
     res.status(200).json({ ok: true, card });
   } catch (err) {
@@ -78,6 +77,22 @@ function readImage(dataUrl) {
     (type === "image/png" && bytes.subarray(1, 4).toString() === "PNG") ||
     (type === "image/webp" && bytes.subarray(8, 12).toString() === "WEBP");
   return looksRight ? { bytes: new Uint8Array(bytes), contentType: type } : null;
+}
+
+// "Onboarding, fintech , #Dark,,onboarding" → ["Onboarding", "fintech", "Dark"]
+// Same rules as tagsFrom() in js/app.js. Notion tags can't contain commas.
+function cleanTags(input) {
+  const parts = Array.isArray(input) ? input : String(input || "").split(",");
+  const seen = new Set();
+  const tags = [];
+  for (const part of parts) {
+    const tag = String(part).trim().replace(/^#+/, "").replace(/\s+/g, " ").trim().slice(0, MAX_TAG_LENGTH);
+    if (!tag || seen.has(tag.toLowerCase())) continue;
+    seen.add(tag.toLowerCase());
+    tags.push(tag);
+    if (tags.length === MAX_TAGS) break;
+  }
+  return tags;
 }
 
 // Compare secrets without leaking how many characters matched

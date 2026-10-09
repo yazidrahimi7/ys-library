@@ -343,11 +343,17 @@ div.shot-img { height: 240px; background: var(--mid); }
 .btn-ghost { background: transparent; box-shadow: inset 0 0 0 1px var(--border); }
 .btn-ghost:hover { background: var(--mid); }
 
+/* Flexbox (not grid) + no padding: iPhone Safari doesn't reliably center
+   content in grid buttons, and adds its own button padding */
 .icon-btn {
-  display: inline-grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   width: 40px;
   height: 40px;
+  padding: 0;
+  line-height: 0;
   border: 0;
   border-radius: var(--radius);
   background: transparent;
@@ -371,6 +377,8 @@ div.shot-img { height: 240px; background: var(--mid); }
 
 .dialog-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 .dialog-head h3 { margin: 0; font-size: 22px; font-weight: 500; }
+.dialog-head h3:focus,
+.lightbox-figure:focus { outline: none; }   /* focused on open only to keep focus off the ✕ */
 .dialog-note { margin: 0 0 24px; color: var(--text-2); font-size: 14px; }
 
 /* Small warning when screenshots are running low */
@@ -386,7 +394,22 @@ div.shot-img { height: 240px; background: var(--mid); }
 .quota-note .feather { width: 14px; height: 14px; margin-top: 3px; }
 
 .field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-.field > span { color: var(--text-2); font-size: 13px; }
+.field > span,
+.field > label { color: var(--text-2); font-size: 13px; }
+
+/* Tags (gallery images): small chips */
+.tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag-list:empty { display: none; }
+.tag {
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--mid);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.4;
+}
+.lightbox-figure .tag-list { justify-content: center; }
 .field input,
 .field textarea,
 .field select {
@@ -523,7 +546,7 @@ div.shot-img { height: 240px; background: var(--mid); }
   }
   .sidebar.is-open + .sidebar-backdrop { opacity: 1; pointer-events: auto; }
 
-  .menu-btn, .submit-btn, .sidebar-close { display: inline-grid; }
+  .menu-btn, .submit-btn, .sidebar-close { display: inline-flex; }
   .menu-btn,
   .submit-btn { flex-shrink: 0; width: 56px; height: 56px; background: var(--mid); color: var(--text); }
 

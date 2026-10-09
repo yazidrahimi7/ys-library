@@ -68,6 +68,7 @@ Cards are managed in the **library CMS** Notion database.
 | `description` | Card description |
 | `type` | Categories the card appears in (tag names must match the sidebar names in `js/config.js`). Add the **Featured** tag to also show it in the Featured row |
 | `Published` | Only checked rows appear on the site |
+| `tags` | Optional. Free-form tags for gallery images, filled by the Upload form |
 | `order` | Optional Number column. Position: 1 first, 2 second… Empty = after numbered cards |
 
 Card order in each category: ⭐ cards first → then `order` → then newest.
@@ -113,10 +114,11 @@ masonry layout — 4 columns on desktop, 3 on tablet, 2 on phones (`--gallery-co
 `css/styles.css`). Click an image to view it enlarged; use the arrows or ←/→ keys to browse.
 
 **Uploading (only you):** on the Screenshots page the Submit button becomes **Upload**.
-Choose an image, optionally add a title/description, and enter your password (asked once;
+Choose an image, add tags separated by commas (e.g. `onboarding, fintech, dark mode`), and enter your password (asked once;
 the browser remembers it). The image is shrunk to a JPEG (max 1200px wide) in the browser,
 saved in the assets repo under `screenshots/`, and added to Notion as a published row
-tagged `Screenshots`. It appears in the gallery right away.
+tagged `Screenshots`, with your tags in the `tags` column. It appears in the gallery right away.
+Tags show under the image when it's enlarged, and the search bar searches them too.
 
 Setup: in Vercel add `UPLOAD_PASSWORD` = your password. Never put the password in the code — this repo is public. Without it, nobody
 (including you) can upload — the assets repo is public, so uploads must be locked.

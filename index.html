@@ -76,7 +76,7 @@
     <dialog class="dialog" id="form-dialog">
       <form id="submit-form" novalidate>
         <div class="dialog-head">
-          <h3 id="form-title">Submit a website</h3>
+          <h3 id="form-title" tabindex="-1">Submit a website</h3>
           <button type="button" class="icon-btn" data-close aria-label="Close">
             <i data-feather="x"></i>
           </button>
@@ -103,15 +103,22 @@
           <input name="url" type="url" placeholder="https://example.com" maxlength="500" />
         </label>
 
-        <label class="field">
+        <label class="field" data-only="website">
           <span>Title</span>
-          <input name="title" type="text" id="title-input" maxlength="100" />
+          <input name="title" type="text" placeholder="Leave empty to use the domain name" maxlength="100" />
         </label>
 
-        <label class="field">
+        <label class="field" data-only="website">
           <span>Description</span>
           <textarea name="description" rows="3" placeholder="What makes it great?" maxlength="300"></textarea>
         </label>
+
+        <!-- Upload mode: tags, separated by commas; previewed as chips below -->
+        <div class="field" data-only="upload">
+          <label for="tags-input">Tags</label>
+          <input type="text" id="tags-input" placeholder="e.g. onboarding, fintech, dark mode" autocomplete="off" />
+          <div class="tag-list" id="tags-preview" aria-live="polite"></div>
+        </div>
 
         <label class="field" data-only="website">
           <span>Category</span>
@@ -162,7 +169,7 @@
     <dialog class="lightbox" id="lightbox" aria-label="Image viewer">
       <button class="icon-btn lightbox-close" data-close aria-label="Close"><i data-feather="x"></i></button>
       <button class="icon-btn lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous image"><i data-feather="chevron-left"></i></button>
-      <figure class="lightbox-figure">
+      <figure class="lightbox-figure" tabindex="-1">
         <img id="lightbox-img" alt="" />
         <figcaption id="lightbox-caption"></figcaption>
       </figure>
