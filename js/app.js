@@ -330,8 +330,10 @@ function showImage(index) {
   $("#lightbox-img").alt = displayTitle(item.title);
   const caption = $("#lightbox-caption");
   caption.innerHTML = "";
+  // Gallery images show only their tags (their title is just an automatic
+  // "Screenshot <date>"); anything else shows its title and description
   if (item.tags?.length) caption.append(tagList(item.tags));
-  else caption.textContent = [displayTitle(item.title), item.description].filter(Boolean).join(" — ");
+  else if (item.url) caption.textContent = [displayTitle(item.title), item.description].filter(Boolean).join(" — ");
   lightbox.classList.toggle("is-single", n < 2);
 }
 
