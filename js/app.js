@@ -137,10 +137,11 @@ function renderContent() {
     if (featured.length) content.append(section("Featured", featured));
 
     for (const cat of allCategories) {
+      if (isGallery(cat)) continue;   // galleries (e.g. Screenshots) only show on their own page
       const cards = cardsFor(cat.id);
       if (!cards.length) continue;
       const more = cards.length > PREVIEW_COUNT ? cat.id : null;
-      content.append(section(cat.name, cards.slice(0, PREVIEW_COUNT), { viewAll: more, gallery: isGallery(cat) }));
+      content.append(section(cat.name, cards.slice(0, PREVIEW_COUNT), { viewAll: more }));
     }
 
     if (!state.cards.length) {

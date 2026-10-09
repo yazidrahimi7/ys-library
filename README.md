@@ -43,7 +43,8 @@ Submit form says it only works on the live site.
 ## Pages
 
 - **All** (`#all`): a **Featured** row (cards tagged `Featured` in Notion), then up to
-  8 cards from each category that has any, with a **View all** button when there are more.
+  8 cards from each category that has any, with a **View all** link when there are more.
+  Gallery categories (Screenshots) aren't shown here — only on their own page.
 - **A category** (e.g. `#web`): every card in that category.
 - **Search**: type in the search bar to search titles, descriptions, links and
   categories across all cards. `Esc` clears it.
