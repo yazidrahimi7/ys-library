@@ -114,13 +114,11 @@ a { color: inherit; }
   background: var(--surface);
   text-align: center;
 }
+/* Image at the top of the sidebar's Submit card — replace images/promo-art.png to change it */
 .promo-art {
   height: 84px;
   border-radius: 6px;
-  background:
-    radial-gradient(120% 90% at 20% 30%, rgba(120, 160, 255, 0.55), transparent 60%),
-    radial-gradient(90% 120% at 85% 80%, rgba(10, 30, 120, 0.9), transparent 70%),
-    linear-gradient(135deg, #2a58d8 0%, #1638a8 55%, #0c2380 100%);
+  background: #1638a8 url("../images/promo-art.png") center / cover no-repeat;
 }
 .promo-heading { margin: 20px 0 6px; font-size: 18px; font-weight: 600; }
 .promo-text { margin: 0 0 20px; color: var(--text-2); }
