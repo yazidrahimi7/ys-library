@@ -41,7 +41,7 @@
           <p class="promo-heading" data-text="promo.heading"></p>
           <p class="promo-text" data-text="promo.text"></p>
           <button class="btn-pill" data-open-submit>
-            <i data-feather="plus"></i> Submit
+            <i data-feather="plus"></i> <span data-cta-label>Submit</span>
           </button>
         </div>
       </aside>
@@ -68,27 +68,44 @@
       </main>
     </div>
 
-    <!-- ============ SUBMIT DIALOG ============ -->
-    <!-- Sends to api/submit.js, which adds an unpublished row in Notion -->
+    <!-- ============ SUBMIT / UPLOAD DIALOG ============ -->
+    <!-- Two modes (set by app.js):
+         "website" → api/submit.js adds an unpublished row in Notion
+         "upload"  → api/upload.js adds an image to the gallery (needs your upload key)
+         Elements with data-only="website" / "upload" only show in that mode. -->
     <dialog class="dialog" id="form-dialog">
       <form id="submit-form" novalidate>
         <div class="dialog-head">
-          <h3>Submit a website</h3>
+          <h3 id="form-title">Submit a website</h3>
           <button type="button" class="icon-btn" data-close aria-label="Close">
             <i data-feather="x"></i>
           </button>
         </div>
 
-        <p class="dialog-note">Submissions are reviewed before they appear on the site.</p>
+        <p class="dialog-note" data-only="website">Submissions are reviewed before they appear on the site.</p>
+        <p class="dialog-note" data-only="upload">Images are shrunk before uploading and appear in the gallery right away.</p>
 
-        <label class="field">
+        <!-- Upload mode: the image -->
+        <div class="field" data-only="upload">
+          <span>Image *</span>
+          <label class="image-pick" id="image-pick">
+            <input type="file" id="image-input" accept="image/*" />
+            <img id="image-preview" alt="" hidden />
+            <span class="image-pick-hint" id="image-hint">
+              <i data-feather="image"></i>
+              Tap to choose a screenshot
+            </span>
+          </label>
+        </div>
+
+        <label class="field" data-only="website">
           <span>Website URL *</span>
-          <input name="url" type="url" placeholder="https://example.com" maxlength="500" required />
+          <input name="url" type="url" placeholder="https://example.com" maxlength="500" />
         </label>
 
         <label class="field">
           <span>Title</span>
-          <input name="title" type="text" placeholder="Leave empty to use the domain name" maxlength="100" />
+          <input name="title" type="text" id="title-input" maxlength="100" />
         </label>
 
         <label class="field">
@@ -96,12 +113,12 @@
           <textarea name="description" rows="3" placeholder="What makes it great?" maxlength="300"></textarea>
         </label>
 
-        <label class="field">
+        <label class="field" data-only="website">
           <span>Category</span>
           <select name="type" id="category-select"></select>
         </label>
 
-        <label class="field">
+        <label class="field" data-only="website">
           <span>Thumbnail image link (optional)</span>
           <input name="thumbnail" type="url" placeholder="https://example.com/image.png" maxlength="500" />
           <!-- Shown only when screenshots are running low (filled in by app.js) -->
@@ -109,6 +126,12 @@
             <i data-feather="info"></i>
             <span id="quota-text"></span>
           </span>
+        </label>
+
+        <!-- Upload mode: only asked once; the browser remembers it afterwards -->
+        <label class="field" data-only="upload" id="key-field">
+          <span>Upload key</span>
+          <input type="password" id="key-input" autocomplete="current-password" />
         </label>
 
         <!-- Spam trap: hidden from people, bots tend to fill it in -->
@@ -124,15 +147,26 @@
         </div>
       </form>
 
-      <!-- Shown after a successful submission -->
+      <!-- Shown after a successful submission / upload -->
       <div class="thanks" id="thanks" hidden>
-        <h3>Thanks!</h3>
-        <p>Your suggestion was sent. It will appear on the site once it's reviewed.</p>
+        <h3 id="thanks-title">Thanks!</h3>
+        <p id="thanks-text"></p>
         <div class="dialog-actions">
-          <button type="button" class="btn btn-ghost" id="submit-another">Submit another</button>
+          <button type="button" class="btn btn-ghost" id="submit-another">Add another</button>
           <button type="button" class="btn btn-primary" data-close>Done</button>
         </div>
       </div>
+    </dialog>
+
+    <!-- ============ IMAGE VIEWER (gallery) ============ -->
+    <dialog class="lightbox" id="lightbox" aria-label="Image viewer">
+      <button class="icon-btn lightbox-close" data-close aria-label="Close"><i data-feather="x"></i></button>
+      <button class="icon-btn lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous image"><i data-feather="chevron-left"></i></button>
+      <figure class="lightbox-figure">
+        <img id="lightbox-img" alt="" />
+        <figcaption id="lightbox-caption"></figcaption>
+      </figure>
+      <button class="icon-btn lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next image"><i data-feather="chevron-right"></i></button>
     </dialog>
 
     <!-- Order matters: config must load before app -->

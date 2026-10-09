@@ -9,6 +9,9 @@
   - `id` is used in the page address (#web). Keep it short, lowercase,
     no spaces.
   - `open: true` shows a group expanded when the page loads.
+  - `layout: "gallery"` shows the category as an image gallery (masonry)
+    instead of website cards, and its Submit button becomes an Upload
+    button (see api/upload.js — only you can upload, with your upload key).
 */
 
 window.LIBRARY_CONFIG = {
@@ -35,6 +38,7 @@ window.LIBRARY_CONFIG = {
         { id: "mobile", name: "Mobile" },
         { id: "video", name: "Video" },
         { id: "portfolio", name: "Portfolio" },
+        { id: "screenshots", name: "Screenshots", layout: "gallery" },
       ],
     },
     {

@@ -36,6 +36,7 @@ Submit form says it only works on the live site.
 | `lib/quota.js` | Tracks how many free screenshots are left | warning level (`LOW_AT`) |
 | `api/quota.js` | Screenshot quota for the Submit form's note (`/api/quota`) | — |
 | `api/recapture.js` | Daily catch-up for cards still missing an image | time budget |
+| `api/upload.js` | Your image uploads to the Screenshots gallery (`/api/upload`) | gallery tag (`GALLERY_TYPE`) |
 | `scripts/sync-notion.mjs` | Saves Notion cards to `data/cms.json` (`npm run sync`) | — |
 | `data/cms.json` | Saved copy of the Notion cards, used locally and as backup | don't edit by hand |
 
@@ -103,6 +104,30 @@ with access to **only** `ys-library-assets` and **Contents: Read and write**. In
 - `GITHUB_TOKEN` = that token
 - `GITHUB_ASSETS_REPO` = `yazidrahimi7/ys-library-assets`
 - `CRON_SECRET` = any long random text (protects the daily catch-up run)
+- `UPLOAD_KEY` = a long secret only you know (for uploading to the Screenshots gallery)
+
+## Screenshots gallery
+
+The **Screenshots** category (`layout: "gallery"` in `js/config.js`) shows images in a
+masonry layout — 4 columns on desktop, 3 on tablet, 2 on phones (`--gallery-columns` in
+`css/styles.css`). Click an image to view it enlarged; use the arrows or ←/→ keys to browse.
+
+**Uploading (only you):** on the Screenshots page the Submit button becomes **Upload**.
+Choose an image, optionally add a title/description, and enter your upload key (asked once;
+the browser remembers it). The image is shrunk to a JPEG (max 1200px wide) in the browser,
+saved in the assets repo under `screenshots/`, and added to Notion as a published row
+tagged `Screenshots`. It appears in the gallery right away.
+
+Setup: in Vercel add `UPLOAD_KEY` = a long secret only you know. Without it, nobody
+(including you) can upload — the assets repo is public, so uploads must be locked.
+
+You can also add gallery images straight in Notion: a row with `type` = Screenshots,
+`Published` ticked, and the image link in `thumbnail` (no `url` needed).
+
+## Loading
+
+If cards take more than ¼ second to load, grey shimmering placeholders show in their
+place (`SKELETON_DELAY` in `js/app.js`). Each image also shimmers until it has loaded.
 
 ## Visitor submissions
 

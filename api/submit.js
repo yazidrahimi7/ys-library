@@ -12,7 +12,7 @@
 import { createSubmission, fetchTypeNames } from "../lib/notion.js";
 
 // Tags visitors can't choose — only you set these in Notion (lowercase)
-const OWNER_ONLY_TYPES = ["featured"];
+const OWNER_ONLY_TYPES = ["featured", "screenshots"];
 
 // Length limits for each field (characters)
 const LIMITS = { url: 500, title: 100, description: 300, thumbnail: 500 };

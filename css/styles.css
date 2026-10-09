@@ -18,6 +18,7 @@
   --gutter: 24px;                         /* space around the main area */
   --radius: 8px;
   --card-columns: 4;                      /* cards per row on desktop (tablet/mobile below) */
+  --gallery-columns: 4;                   /* image columns in gallery categories (tablet/mobile below) */
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -37,6 +38,7 @@ body {
 }
 
 button { font: inherit; color: inherit; cursor: pointer; }
+[hidden] { display: none !important; }   /* "hidden" always wins over display rules */
 a { color: inherit; }
 .feather { width: 20px; height: 20px; stroke-width: 2; flex-shrink: 0; }
 
@@ -270,6 +272,55 @@ a { color: inherit; }
 }
 .empty p { margin: 0 0 20px; }
 
+/* ============================================================
+   GALLERY (masonry) — categories with layout: "gallery"
+   ============================================================ */
+.masonry {
+  display: grid;
+  grid-template-columns: repeat(var(--gallery-columns), minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+.masonry-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
+.shot {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+  cursor: zoom-in;
+  transition: border-color 150ms ease, transform 160ms var(--ease-out);
+}
+.shot:hover { border-color: var(--focus); }
+.shot:active { transform: scale(0.98); }
+.shot:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.shot-img { display: block; width: 100%; height: auto; }
+.shot-img.is-loading { min-height: 240px; }   /* room for the shimmer before the size is known */
+div.shot-img { height: 240px; background: var(--mid); }
+
+/* ============================================================
+   LOADING — shimmer on placeholders and images still loading
+   ============================================================ */
+.skeleton,
+.is-loading {
+  background: linear-gradient(90deg, var(--mid) 0%, #2c2c2c 50%, var(--mid) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+@keyframes shimmer {
+  from { background-position: 100% 0; }
+  to   { background-position: -100% 0; }
+}
+.skeleton { border-radius: var(--radius); }
+.skeleton-title { width: 180px; height: 28px; margin-bottom: 20px; }
+.skeleton-card { pointer-events: none; }
+.skeleton-card .card-thumb { border-radius: 4px; }
+.skeleton-line { height: 16px; margin-top: 18px; width: 70%; border-radius: 4px; }
+.skeleton-line.short { width: 45%; margin-top: 10px; }
+
 
 /* ============================================================
    BUTTONS (dialog + empty state)
@@ -365,6 +416,75 @@ a { color: inherit; }
 
 .dialog-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
 
+/* Upload mode: tap-to-choose image area with preview */
+.image-pick {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 140px;
+  padding: 12px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--mid);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: border-color 150ms ease;
+}
+.image-pick:hover,
+.image-pick:focus-within { border-color: var(--focus); }
+.image-pick input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.image-pick img { max-width: 100%; max-height: 260px; border-radius: 4px; }
+.image-pick-hint { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 14px; }
+
+/* ============================================================
+   IMAGE VIEWER (gallery)
+   ============================================================ */
+.lightbox {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+}
+.lightbox::backdrop { background: rgba(0, 0, 0, 0.9); }
+.lightbox[open] { display: flex; align-items: center; justify-content: center; }
+
+.lightbox-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 56px 72px 24px;
+  justify-content: center;
+}
+.lightbox-figure img {
+  max-width: 100%;
+  max-height: calc(100vh - 140px);
+  object-fit: contain;
+  border-radius: var(--radius);
+}
+.lightbox-figure figcaption { color: var(--text-2); font-size: 14px; text-align: center; }
+
+.lightbox .icon-btn { position: absolute; z-index: 1; width: 44px; height: 44px; color: var(--text); background: rgba(35, 35, 35, 0.8); }
+.lightbox .icon-btn:hover { background: var(--mid); }
+.lightbox-close { top: 16px; right: 16px; }
+.lightbox-prev { left: 16px; top: 50%; transform: translateY(-50%); }
+.lightbox-next { right: 16px; top: 50%; transform: translateY(-50%); }
+.lightbox.is-single .lightbox-nav { display: none; }
+
+@media (max-width: 767px) {
+  .lightbox-figure { padding: 64px 12px 24px; }
+  .lightbox-prev, .lightbox-next { top: auto; bottom: 16px; transform: none; }
+  .lightbox-figure img { max-height: calc(100vh - 170px); }
+}
+
 /* ============================================================
    RESPONSIVE
    Desktop (1200px and up): 4 cards per row, sidebar always visible
@@ -377,7 +497,7 @@ a { color: inherit; }
 .sidebar-backdrop { display: none; }
 
 @media (max-width: 1199px) {
-  :root { --card-columns: 3; }
+  :root { --card-columns: 3; --gallery-columns: 3; }
 
   .app { grid-template-columns: minmax(0, 1fr); }
 
@@ -412,7 +532,7 @@ a { color: inherit; }
 }
 
 @media (max-width: 767px) {
-  :root { --card-columns: 1; --gutter: 16px; }
+  :root { --card-columns: 1; --gallery-columns: 2; --gutter: 16px; }
 
   .main { padding-top: 16px; }
   .search { height: 48px; padding: 0 14px; }
@@ -424,4 +544,5 @@ a { color: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0.01ms !important; }
+  .skeleton, .is-loading { animation: none; }
 }
