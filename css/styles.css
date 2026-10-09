@@ -465,6 +465,7 @@ div.shot-img { height: 240px; background: var(--mid); }
 .lightbox {
   width: 100vw;
   height: 100vh;
+  height: 100dvh;            /* phones: the visible height, not counting the browser bars */
   max-width: none;
   max-height: none;
   margin: 0;
@@ -473,7 +474,7 @@ div.shot-img { height: 240px; background: var(--mid); }
   background: transparent;
   color: var(--text);
 }
-.lightbox::backdrop { background: rgba(0, 0, 0, 0.9); }
+.lightbox::backdrop { background: rgba(8, 8, 8, 0.97); }   /* nearly solid, so page buttons don't show through */
 .lightbox[open] { display: flex; align-items: center; justify-content: center; }
 
 .lightbox-figure {
@@ -490,6 +491,7 @@ div.shot-img { height: 240px; background: var(--mid); }
 .lightbox-figure img {
   max-width: 100%;
   max-height: calc(100vh - 140px);
+  max-height: calc(100dvh - 140px);
   object-fit: contain;
   border-radius: var(--radius);
 }
@@ -497,15 +499,20 @@ div.shot-img { height: 240px; background: var(--mid); }
 
 .lightbox .icon-btn { position: absolute; z-index: 1; width: 44px; height: 44px; color: var(--text); background: rgba(35, 35, 35, 0.8); }
 .lightbox .icon-btn:hover { background: var(--mid); }
-.lightbox-close { top: 16px; right: 16px; }
+/* Kept clear of the iPhone notch / status bar */
+.lightbox-close { top: max(16px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right)); }
 .lightbox-prev { left: 16px; top: 50%; transform: translateY(-50%); }
 .lightbox-next { right: 16px; top: 50%; transform: translateY(-50%); }
 .lightbox.is-single .lightbox-nav { display: none; }
 
 @media (max-width: 767px) {
-  .lightbox-figure { padding: 64px 12px 24px; }
-  .lightbox-prev, .lightbox-next { top: auto; bottom: 16px; transform: none; }
-  .lightbox-figure img { max-height: calc(100vh - 170px); }
+  .lightbox-figure { padding: 80px 16px 80px; }
+  /* Same size and spot as the page's menu / + buttons, so they line up */
+  .lightbox .icon-btn { width: 48px; height: 48px; background: var(--mid); }
+  .lightbox-prev, .lightbox-next { top: auto; bottom: max(16px, env(safe-area-inset-bottom)); transform: none; }
+  .lightbox-prev { left: 16px; }
+  .lightbox-next { right: 16px; }
+  .lightbox-figure img { max-height: calc(100vh - 210px); max-height: calc(100dvh - 210px); }
 }
 
 /* ============================================================
